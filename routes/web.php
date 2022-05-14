@@ -113,6 +113,8 @@ Route::post('/admin/eventos-imagen/ordenar', [EventosController::class,'ordenarE
 
 
 
+
+
 // --- PRODUCTOS ---
 Route::get('/admin/productos/{id}', [CategoriasController::class,'indexProductos']);
 Route::get('/admin/productos/tablas/{id}', [CategoriasController::class,'tablaProductos']);

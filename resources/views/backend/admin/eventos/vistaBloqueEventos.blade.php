@@ -73,6 +73,11 @@
                                 </div>
 
                                 <div class="form-group">
+                                    <label>Fecha</label>
+                                    <input type="date" class="form-control" id="fecha-nuevo" placeholder="Fecha">
+                                </div>
+
+                                <div class="form-group">
                                     <div>
                                         <label>Imagen</label>
                                         <p>Tamaño recomendado de: 600 x -</p>
@@ -115,6 +120,11 @@
                                 <label>Nombre</label>
                                 <input type="hidden" id="id-editar">
                                 <input type="text" maxlength="200" class="form-control" id="nombre-editar" placeholder="Nombre">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Fecha</label>
+                                <input type="date" class="form-control" id="fecha-editar" placeholder="Fecha">
                             </div>
 
                             <div class="form-group">
@@ -187,6 +197,7 @@
 
             var nombre = document.getElementById('nombre-nuevo').value;
             var imagen = document.getElementById('imagen-nuevo');
+            var fecha = document.getElementById('fecha-nuevo').value;
 
             if(nombre === '') {
                 toastr.error('Nombre es requerido');
@@ -195,6 +206,11 @@
 
             if(nombre.length > 200){
                 toastr.error('Nombre máximo 200 caracteres');
+                return;
+            }
+
+            if(fecha === '') {
+                toastr.error('Fecha es requerido');
                 return;
             }
 
@@ -212,6 +228,7 @@
 
             var formData = new FormData();
             formData.append('nombre', nombre);
+            formData.append('fecha', fecha);
             formData.append('imagen', imagen.files[0]);
 
             axios.post('/admin/eventos/nuevo', formData, {
@@ -248,6 +265,7 @@
                         $('#modalEditar').modal('show');
                         $('#id-editar').val(id);
                         $('#nombre-editar').val(response.data.evento.nombre);
+                        $('#fecha-editar').val(response.data.evento.fecha);
 
                         if(response.data.evento.activo === 0){
                             $("#toggle-activo").prop("checked", false);
@@ -269,6 +287,7 @@
 
             var id = document.getElementById('id-editar').value;
             var nombre = document.getElementById('nombre-editar').value;
+            var fecha = document.getElementById('fecha-editar').value;
             var imagen = document.getElementById('imagen-editar');
             var cbactivo = document.getElementById('toggle-activo').checked;
 
@@ -284,6 +303,11 @@
                 return;
             }
 
+            if(fecha === '') {
+                toastr.error('Fecha es requerido');
+                return;
+            }
+
             if(imagen.files && imagen.files[0]){ // si trae imagen
                 if (!imagen.files[0].type.match('image/jpeg|image/jpeg|image/png')){
                     toastr.error('Formato de imagen permitido: .png .jpg .jpeg');
@@ -295,6 +319,7 @@
             var formData = new FormData();
             formData.append('id', id);
             formData.append('nombre', nombre);
+            formData.append('fecha', fecha);
             formData.append('imagen', imagen.files[0]);
             formData.append('cbactivo', check_activo);
 

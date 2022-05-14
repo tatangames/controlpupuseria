@@ -10,4 +10,8 @@ class EventoImagenes extends Model
     use HasFactory;
     protected $table = 'evento_imagenes';
     public $timestamps = false;
+
+    protected $fillable = [
+        'posicion',
+    ];
 }

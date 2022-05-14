@@ -62,7 +62,7 @@
 
             openLoading();
 
-            axios.post('/bloques/ordenar',  {
+            axios.post('/admin/eventos-imagen/ordenar',  {
                 'order': order
             })
                 .then((response) => {

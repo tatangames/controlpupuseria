@@ -46,11 +46,10 @@ class CategoriasController extends Controller
 
         if($upload){
 
-            $suma = BloqueServicios::sum('posicion');
-            if($suma == null){
-                $suma = 1;
+            if($info = BloqueServicios::orderBy('posicion', 'DESC')->first()){
+                $suma = $info->posicion + 1;
             }else{
-                $suma = $suma + 1;
+                $suma = 1;
             }
 
             $ca = new BloqueServicios();
@@ -187,11 +186,10 @@ class CategoriasController extends Controller
 
         if ($validar->fails()){return ['success' => 0]; }
 
-        $suma = Categorias::sum('posicion');
-        if($suma == null){
-            $suma = 1;
+        if($info = Categorias::orderBy('posicion', 'DESC')->first()){
+            $suma = $info->posicion + 1;
         }else{
-            $suma = $suma + 1;
+            $suma = 1;
         }
 
         $ca = new Categorias();
@@ -313,11 +311,10 @@ class CategoriasController extends Controller
 
             if($upload){
 
-                $suma = Producto::sum('posicion');
-                if($suma == null){
-                    $suma = 1;
+                if($info = Producto::orderBy('posicion', 'DESC')->first()){
+                    $suma = $info->posicion + 1;
                 }else{
-                    $suma = $suma + 1;
+                    $suma = 1;
                 }
 
                 $ca = new Producto();

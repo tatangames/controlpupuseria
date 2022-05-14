@@ -10,4 +10,8 @@ class BloquesEventos extends Model
     use HasFactory;
     protected $table = 'bloques_eventos';
     public $timestamps = false;
+
+    protected $fillable = [
+        'posicion',
+    ];
 }

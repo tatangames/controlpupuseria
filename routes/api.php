@@ -58,6 +58,12 @@ Route::post('cliente/proceso/orden/cancelar',  [ApiOrdenesController::class, 'ca
 Route::post('cliente/listado/productos/ordenes',  [ApiOrdenesController::class, 'listadoProductosOrdenes']);
 Route::post('cliente/listado/productos/ordenes-individual',  [ApiOrdenesController::class, 'listadoProductosOrdenesIndividual']);
 
+// eventos
+Route::get('cliente/eventos/listado', [ApiServiciosController::class, 'listadoEventos']);
+Route::post('cliente/eventos-imagen/listado', [ApiServiciosController::class, 'listadoEventosImagenes']);
+
+
+
 
 // ****--------------  AFILIADOS  ---------------- **** //
 

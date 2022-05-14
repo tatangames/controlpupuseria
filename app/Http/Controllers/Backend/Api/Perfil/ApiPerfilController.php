@@ -28,8 +28,8 @@ class ApiPerfilController extends Controller
 
         if($info = Clientes::where('id', $request->id)->first()){
 
-            return ['success' => 1, 'nombre' => $info->nombre,
-                'correo' => $info->correo, 'imagen' => $info->imagen,
+            return ['success' => 1, 'correo' => $info->correo,
+                'imagen' => $info->imagen,
                 'usuario' => $info->usuario];
         }else{
             return ['success' => 2];
@@ -39,63 +39,25 @@ class ApiPerfilController extends Controller
     public function editarPerfil(Request $request){
         $reglaDatos = array(
             'id' => 'required',
-            'nombre' => 'required',
+            'correo' => 'required'
         );
 
         $validator = Validator::make($request->all(), $reglaDatos);
 
         if ( $validator->fails()){return ['success' => 0]; }
 
-        if($request->correo != null){
-            if(Clientes::where('correo', $request->correo)
-                ->where('id', '!=', $request->id)
-                ->first()){
+        if(Clientes::where('correo', $request->correo)
+            ->where('id', '!=', $request->id)
+            ->first()){
 
-                // correo ya esta registrado
-                return ['success' => 1];
-            }
+            // correo ya esta registrado
+            return ['success' => 1];
         }
 
-        if($request->hasFile('image')){
+        Clientes::where('id', $request->id)->update([
+            'correo' => $request->correo]);
 
-            $cadena = Str::random(15);
-            $tiempo = microtime();
-            $union = $cadena . $tiempo;
-            $nombre = str_replace(' ', '_', $union);
-
-            // por defecto la extension sera .jpg
-            $nombreFoto = $nombre . strtolower('.jpg');
-            $avatar = $request->file('image');
-            $upload = Storage::disk('imagenes')->put($nombreFoto, \File::get($avatar));
-
-            if($upload){
-                if($data = Clientes::where('id', $request->id)->first()){
-                    $imagenOld = $data->imagen;
-
-                    Clientes::where('id', $request->id)->update([
-                        'imagen' => $nombreFoto,
-                        'nombre' => $request->nombre,
-                        'correo' => $request->correo]);
-
-                    if(Storage::disk('imagenes')->exists($imagenOld)){
-                        Storage::disk('imagenes')->delete($imagenOld);
-                    }
-
-                    return ['success' => 2];
-                }else{
-                    return ['success' => 3];
-                }
-            }else{
-                return ['success' => 3];
-            }
-        }else{
-
-            Clientes::where('id', $request->id)->update([
-                'nombre' => $request->nombre,
-                'correo' => $request->correo]);
-
-            return ['success' => 2];
-        }
+        return ['success' => 2];
     }
 
     public function listadoDeDirecciones(Request $request){
@@ -268,6 +230,7 @@ class ApiPerfilController extends Controller
             'nombre' => 'required',
             'direccion' => 'required',
             'zona_id' => 'required',
+            'telefono' => 'required'
         );
 
         $validarDatos = Validator::make($request->all(), $reglaDatos);
@@ -292,11 +255,14 @@ class ApiPerfilController extends Controller
                 $di->longitud = $request->longitud;
                 $di->latitudreal = $request->latitudreal;
                 $di->longitudreal = $request->longitudreal;
+                $di->telefono = $request->telefono;
 
                 if($di->save()){
 
                     try {
-                        DireccionCliente::where('clientes_id', $request->id)->where('id', '!=', $di->id)->update(['seleccionado' => 0]);
+                        DireccionCliente::where('clientes_id', $request->id)
+                            ->where('id', '!=', $di->id)
+                            ->update(['seleccionado' => 0]);
 
                         // BORRAR CARRITO DE COMPRAS, SI CAMBIO DE DIRECCION
                         // ya no porque todos apunta a un solo servicio

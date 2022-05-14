@@ -83,7 +83,7 @@
 
             openLoading();
 
-            axios.post('/eventos/ordenar',  {
+            axios.post('/admin/eventos/ordenar',  {
                 'order': order
             })
                 .then((response) => {

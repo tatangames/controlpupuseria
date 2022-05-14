@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Backend\Api\Servicios;
 
 use App\Http\Controllers\Controller;
 use App\Models\BloqueServicios;
+use App\Models\BloquesEventos;
 use App\Models\Categorias;
+use App\Models\EventoImagenes;
 use App\Models\Producto;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -59,7 +61,24 @@ class ApiServiciosController extends Controller
         }
     }
 
+    public function listadoEventos(){
 
+        $eventos = BloquesEventos::where('activo', 1)
+            ->orderBy('posicion')
+            ->get();
 
+        return ['success' => 1, 'eventos' => $eventos];
+    }
+
+    public function listadoEventosImagenes(Request $request){
+
+        $eventos = EventoImagenes::where('evento_id', $request->id)
+            ->orderBy('posicion')
+            ->get();
+
+        $conteo = EventoImagenes::where('evento_id', $request->id)->count();
+
+        return ['success' => 1, 'eventos' => $eventos, 'conteo' => $conteo];
+    }
 
 }

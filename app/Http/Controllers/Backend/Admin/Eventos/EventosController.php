@@ -50,20 +50,18 @@ class EventosController extends Controller
 
         if($upload){
 
-            $suma = BloquesEventos::sum('posicion');
-            if($suma == null){
-                $suma = 1;
+            if($info = BloquesEventos::orderBy('posicion', 'DESC')->first()){
+                $suma = $info->posicion + 1;
             }else{
-                $suma = $suma + 1;
+                $suma = 1;
             }
 
-            $fecha = Carbon::now('America/El_Salvador');
 
             $ca = new BloquesEventos();
             $ca->nombre = $request->nombre;
             $ca->imagen = $nombreFoto;
             $ca->activo = 1;
-            $ca->fecha = $fecha;
+            $ca->fecha = $request->fecha;
             $ca->posicion = $suma;
 
             if($ca->save()){
@@ -125,6 +123,7 @@ class EventosController extends Controller
 
                     BloquesEventos::where('id', $request->id)->update([
                         'nombre' => $request->nombre,
+                        'fecha' => $request->fecha,
                         'imagen' => $nombreFoto,
                         'activo' => $request->cbactivo
                     ]);
@@ -143,6 +142,7 @@ class EventosController extends Controller
 
                 BloquesEventos::where('id', $request->id)->update([
                     'nombre' => $request->nombre,
+                    'fecha' => $request->fecha,
                     'activo' => $request->cbactivo
                 ]);
 
@@ -235,11 +235,11 @@ class EventosController extends Controller
 
         if($upload){
 
-            $suma = EventoImagenes::sum('posicion');
-            if($suma == null){
-                $suma = 1;
+
+            if($info = EventoImagenes::orderBy('posicion', 'DESC')->first()){
+                $suma = $info->posicion + 1;
             }else{
-                $suma = $suma + 1;
+                $suma = 1;
             }
 
             $ca = new EventoImagenes();
@@ -282,7 +282,7 @@ class EventosController extends Controller
 
     public function ordenarEventoImagen(Request $request){
 
-        $tasks = BloquesEventos::all();
+        $tasks = EventoImagenes::all();
 
         foreach ($tasks as $task) {
             $id = $task->id;

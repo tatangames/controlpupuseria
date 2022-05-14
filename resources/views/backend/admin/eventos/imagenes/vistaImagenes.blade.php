@@ -169,7 +169,7 @@
             Swal.fire({
                 title: 'Borrar Imagen?',
                 text: "",
-                icon: 'success',
+                icon: 'info',
                 showCancelButton: true,
                 confirmButtonColor: '#28a745',
                 cancelButtonColor: '#d33',
