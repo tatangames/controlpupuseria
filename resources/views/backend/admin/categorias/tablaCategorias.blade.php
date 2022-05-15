@@ -9,7 +9,8 @@
                         <tr>
                             <th>Posición</th>
                             <th>Nombre</th>
-                            <th>Activo</th>
+                            <th>Activo (Mostrar en App Propietario)</th>
+                            <th>Visible (Cliente)</th>
                             <th>Opciones</th>
                         </tr>
                         </thead>
@@ -22,6 +23,14 @@
 
                                 <td>
                                     @if($dato->activo == 0)
+                                        <span class="badge bg-danger">Desactivado</span>
+                                    @else
+                                        <span class="badge bg-success">Activado</span>
+                                    @endif
+                                </td>
+
+                                <td>
+                                    @if($dato->visible == 0)
                                         <span class="badge bg-danger">Desactivado</span>
                                     @else
                                         <span class="badge bg-success">Activado</span>

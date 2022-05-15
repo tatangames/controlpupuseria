@@ -34,8 +34,8 @@ class ApiClienteController extends Controller
 
             if($info->activo == 0){
 
-                $dato = InformacionAdmin::where('id', 1)->first();
-                return ['success' => 1, 'msj1' => $dato->mensaje_bloqueo];
+                $mensaje = "Usuario ha sido bloqueado. Contactar a la administración";
+                return ['success' => 1, 'msj1' => $mensaje];
             }
 
             if (Hash::check($request->password, $info->password)) {

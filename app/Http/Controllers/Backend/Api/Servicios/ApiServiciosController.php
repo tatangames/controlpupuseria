@@ -32,7 +32,8 @@ class ApiServiciosController extends Controller
         if(BloqueServicios::where('id', $request->idbloque)->first()){
 
             $productos = Categorias::where('bloque_servicios_id', $request->idbloque)
-                ->where('activo', 1)
+                ->where('activo', 1) // app cliente y afiliado
+                ->where('visible', 1) // app cliente
                 ->orderBy('posicion', 'ASC')
                 ->get();
 

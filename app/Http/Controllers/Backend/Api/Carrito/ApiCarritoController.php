@@ -8,6 +8,7 @@ use App\Models\CarritoTemporal;
 use App\Models\Clientes;
 use App\Models\DireccionCliente;
 use App\Models\Horario;
+use App\Models\InformacionAdmin;
 use App\Models\OrdenesDescripcion;
 use App\Models\OrdenesDirecciones;
 use App\Models\Producto;
@@ -336,7 +337,6 @@ class ApiCarritoController extends Controller
             return ['success' => 1];
         }
 
-
         DB::beginTransaction();
 
         try {
@@ -391,6 +391,12 @@ class ApiCarritoController extends Controller
             if($infoZona->saturacion == 1){
                 // zona bloqueada por algun problema
                 return ['success' => 4, 'msj1' => $infoZona->mensaje_bloqueo];
+            }
+
+            // cerrado general de la aplicacion
+            $infoApp = InformacionAdmin::where('id', 1)->first();
+            if($infoApp->cerrado == 1){
+                return ['success' => 4, 'msj1' => $infoApp->mensaje_cerrado];
             }
 
             // horario delivery para esa zona
@@ -463,28 +469,26 @@ class ApiCarritoController extends Controller
                         'precio_consumido' => $resultado,
                         'precio_envio' => $envioPrecio,
 
-                        'estado_2' => 0,
+                        'estado_2' => 0, // el propietario inicia la orden
                         'fecha_2' => null,
                         'hora_2' => 0,
 
-                        'estado_3' => 0,
+                        'estado_3' => 0, // el propietario finaliza la orden
                         'fecha_3' => null,
 
-                        'estado_4' => 0,
+                        'estado_4' => 0, // el motorista inicia el envio
                         'fecha_4' => null,
 
-                        'estado_5' => 0,
+                        'estado_5' => 0, // motorista finaliza el envio
                         'fecha_5' => null,
 
-                        'estado_6' => 0,
+                        'estado_6' => 0, // cliente califica la entrega
                         'fecha_6' => null,
 
-                        'estado_7' => 0,
+                        'estado_7' => 0, // orden cancelamiento
                         'fecha_7' => null,
 
-                        'estado_8' => 0,
-                        'fecha_8' => null,
-                        'mensaje_8' => null,
+                        'mensaje_7' => null,
 
                         'visible' => 1,
                         'visible_p' => 1,
@@ -511,8 +515,8 @@ class ApiCarritoController extends Controller
                 $nuevaDir->ordenes_id = $idOrden;
                 $nuevaDir->zonas_id = $infoZona->id;
                 $nuevaDir->nombre = $infoDireccion->nombre;
+                $nuevaDir->telefono = $infoDireccion->telefono;
                 $nuevaDir->direccion = $infoDireccion->direccion;
-                $nuevaDir->numero_casa = $infoDireccion->numero_casa;
                 $nuevaDir->punto_referencia = $infoDireccion->punto_referencia;
                 $nuevaDir->latitud = $infoDireccion->latitud;
                 $nuevaDir->longitud = $infoDireccion->longitud;
@@ -522,7 +526,6 @@ class ApiCarritoController extends Controller
                 $nuevaDir->save();
 
                 // BORRAR CARRITO TEMPORAL DEL USUARIO
-
                 //CarritoExtra::where('carrito_temporal_id', $cart->id)->delete();
                 //CarritoTemporal::where('clientes_id', $request->clienteid)->delete();
 
@@ -537,7 +540,6 @@ class ApiCarritoController extends Controller
             DB::rollback();
             return [
                 'success' => 101,
-                'message' => "e".  $e
             ];
         }
     }

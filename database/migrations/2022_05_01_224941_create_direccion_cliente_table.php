@@ -20,7 +20,6 @@ class CreateDireccionClienteTable extends Migration
 
             $table->string('nombre', 100);
             $table->string('direccion', 400);
-            $table->string('numero_casa', 30)->nullable();
             $table->string('punto_referencia', 400)->nullable();
             $table->boolean('seleccionado');
             $table->string('latitud', 50);

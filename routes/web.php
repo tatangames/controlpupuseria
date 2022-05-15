@@ -13,6 +13,8 @@ use App\Http\Controllers\Backend\Admin\Motorista\MotoristaController;
 use App\Http\Controllers\Backend\Admin\Servicios\CategoriasController;
 use App\Http\Controllers\Backend\Admin\Clientes\ClientesController;
 use App\Http\Controllers\Backend\Admin\Eventos\EventosController;
+use App\Http\Controllers\Backend\Admin\Horario\HorarioController;
+
 
 // INICIO
 Route::get('/', [LoginController::class,'index'])->name('login');
@@ -111,9 +113,11 @@ Route::post('/admin/eventos-imagen/nuevo', [EventosController::class,'nuevoEvent
 Route::post('/admin/eventos-imagen/borrar', [EventosController::class,'borrarEventoImagen']);
 Route::post('/admin/eventos-imagen/ordenar', [EventosController::class,'ordenarEventoImagen']);
 
-
-
-
+// --- HORARIO ---
+Route::get('/admin/horario', [HorarioController::class,'indexHorario'])->name('index.horario');
+Route::get('/admin/horario/tablas', [HorarioController::class,'tablaHorario']);
+Route::post('/admin/horario/informacion', [HorarioController::class,'informacionHorario']);
+Route::post('/admin/horario/editar', [HorarioController::class,'editarHorario']);
 
 // --- PRODUCTOS ---
 Route::get('/admin/productos/{id}', [CategoriasController::class,'indexProductos']);
@@ -129,7 +133,6 @@ Route::post('/admin/productos/ordenar', [CategoriasController::class,'ordenarPro
 Route::get('/admin/cliente/lista-clientes-hoy', [ClientesController::class, 'indexRegistradosHoy'])->name('index.clientes.registrados.hoy');
 Route::get('/admin/cliente/tablas/cliente-hoy', [ClientesController::class, 'tablaRegistradosHoy']);
 
-
 Route::get('/admin/cliente/listado', [ClientesController::class, 'indexListaClientes'])->name('index.clientes.listado');
 Route::get('/admin/cliente/tabla/listado', [ClientesController::class, 'tablaindexListaClientes']);
 Route::post('/admin/cliente/informacion', [ClientesController::class, 'informacionCliente']);
@@ -140,6 +143,11 @@ Route::get('/admin/cliente/lista/direcciones/{id}', [ClientesController::class, 
 Route::get('/admin/cliente/lista/tabla-direcciones/{id}', [ClientesController::class, 'tablaIndexListaDirecciones']);
 
 
+// --- CONFIGURACION ---
+Route::get('/admin/configuracion/index', [HorarioController::class, 'indexConfiguracion'])->name('index.configuracion');
+Route::get('/admin/configuracion/tablas', [HorarioController::class, 'tablaConfiguracion']);
+Route::post('/admin/configuracion/informacion', [HorarioController::class,'informacionConfiguracion']);
+Route::post('/admin/configuracion/editar', [HorarioController::class,'editarConfiguracion']);
 
 
 

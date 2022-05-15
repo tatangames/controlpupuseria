@@ -21,7 +21,6 @@ class CreateOrdenesDireccionesTable extends Migration
 
             $table->string('nombre', 100);
             $table->string('direccion', 400);
-            $table->string('numero_casa', 30)->nullable();
             $table->string('punto_referencia', 400)->nullable();
             $table->string('latitud', 50)->nullable();
             $table->string('longitud', 50)->nullable();

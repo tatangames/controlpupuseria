@@ -16,10 +16,8 @@ class CreateCarritoTemporalTable extends Migration
         Schema::create('carrito_temporal', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('clientes_id')->unsigned();
-            $table->bigInteger('zonas_id')->unsigned();
 
             $table->foreign('clientes_id')->references('id')->on('clientes');
-            $table->foreign('zonas_id')->references('id')->on('zonas');
         });
     }
 

@@ -8,6 +8,7 @@ use App\Models\CarritoTemporal;
 use App\Models\Clientes;
 use App\Models\DireccionCliente;
 use App\Models\Horario;
+use App\Models\InformacionAdmin;
 use App\Models\Producto;
 use App\Models\Zonas;
 use Carbon\Carbon;
@@ -115,6 +116,11 @@ class ApiProductosController extends Controller
                 return ['success' => 4, 'msj1' => $infoZona->mensaje_bloqueo];
             }
 
+            $infoApp = InformacionAdmin::where('id', 1)->first();
+            if($infoApp->cerrado == 1){
+                return ['success' => 4, 'msj1' => $infoApp->mensaje_cerrado];
+            }
+
             // horario delivery para esa zona
             $horarioDeliveryZona = Zonas::where('id', $infoDireccion->zonas_id)
                 ->where('hora_abierto_delivery', '<=', $hora)
@@ -128,25 +134,35 @@ class ApiProductosController extends Controller
                 return ['success' => 5, 'msj1' => "temporalmente cerrado para esta zona el envio"];
             }
 
-            // guardar producto
-            $carrito = new CarritoTemporal();
-            $carrito->clientes_id = $request->clienteid;
-            $carrito->zonas_id = $infoDireccion->zonas_id;
-            $carrito->save();
+            // verificar si cliente tiene carrito de compras sino solo agregar
 
-            // guardar producto
-            $idcarrito = $carrito->id;
-            $extra = new CarritoExtra();
-            $extra->carrito_temporal_id = $idcarrito;
-            $extra->producto_id = $request->productoid;
-            $extra->cantidad = $request->cantidad;
-            $extra->nota_producto = $request->notaproducto;
-            $extra->save();
+            if($infoC = CarritoTemporal::where('clientes_id', $request->clienteid)->first()){
+                $extra = new CarritoExtra();
+                $extra->carrito_temporal_id = $infoC->id;
+                $extra->producto_id = $request->productoid;
+                $extra->cantidad = $request->cantidad;
+                $extra->nota_producto = $request->notaproducto;
+                $extra->save();
+            }else{
+                // guardar producto
+                $carrito = new CarritoTemporal();
+                $carrito->clientes_id = $request->clienteid;
+                $carrito->save();
+
+                // guardar producto
+                $idcarrito = $carrito->id;
+                $extra = new CarritoExtra();
+                $extra->carrito_temporal_id = $idcarrito;
+                $extra->producto_id = $request->productoid;
+                $extra->cantidad = $request->cantidad;
+                $extra->nota_producto = $request->notaproducto;
+                $extra->save();
+            }
+
             DB::commit();
 
-            return [
-                'success' => 6 // producto agregado
-            ];
+            // producto guardado
+            return ['success' => 6];
 
         }catch(\Error $e){
             DB::rollback();

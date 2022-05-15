@@ -3,27 +3,34 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
+                    <!-- /.card-header -->
                     <div class="card-body">
                         <table id="tabla" class="table table-bordered table-striped">
                             <thead>
                             <tr>
-                                <th>Nombre</th>
-                                <th>Dirección</th>
-                                <th>Referencia</th>
-                                <th>Teléfono</th>
-                                <th>Zona</th>
+                                <th>Cerrar App</th>
+                                <th>Mensaje Cerrado</th>
+                                <th>Opciones</th>
                             </tr>
                             </thead>
                             <tbody>
 
-                            @foreach($lista as $dato)
+                            @foreach($info as $dato)
                                 <tr>
-                                    <td>{{ $dato->nombre }}</td>
-                                    <td>{{ $dato->direccion }}</td>
-                                    <td>{{ $dato->punto_referencia }}</td>
-                                    <td>{{ $dato->telefono }}</td>
-                                    <td>{{ $dato->zona }}</td>
+                                    <td>
+                                        @if($dato->cerrado == 0)
+                                            <span class="badge bg-danger">No</span>
+                                        @else
+                                            <span class="badge bg-success">Sí</span>
+                                        @endif
+                                    </td>
+                                    <td>{{ $dato->mensaje_cerrado }}</td>
 
+                                    <td>
+                                        <button type="button" class="btn btn-primary btn-xs" onclick="verInformacion({{ $dato->id }})">
+                                            <i class="fas fa-eye" title="Editar"></i>&nbsp; Editar
+                                        </button>
+                                    </td>
                                 </tr>
                             @endforeach
 
@@ -47,8 +54,7 @@
             "ordering": true,
             "info": true,
             "autoWidth": false,
-            "pagingType": "full_numbers",
-            "lengthMenu": [[10, 25, 50, 100, 150, -1], [10, 25, 50, 100, 150, "Todo"]],
+
             "language": {
 
                 "sProcessing": "Procesando...",

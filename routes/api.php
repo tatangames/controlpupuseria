@@ -23,7 +23,6 @@ Route::post('cliente/enviar/codigo-correo', [ApiClienteController::class, 'envia
 Route::post('cliente/verificar/codigo-correo-password', [ApiClienteController::class, 'verificarCodigoCorreoPassword']);
 Route::post('cliente/actualizar/password', [ApiClienteController::class, 'actualizarPasswordCliente']);
 
-
 // perfil
 Route::post('cliente/informacion', [ApiPerfilController::class, 'informacionPerfil']);
 Route::post('cliente/editar-perfil', [ApiPerfilController::class, 'editarPerfil']);

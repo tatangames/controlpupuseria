@@ -28,7 +28,9 @@ class ApiCategoriaAfiliadoController extends Controller
 
         if(Afiliados::where('id', $request->id)->first()){
 
-            $categorias = Categorias::orderBy('posicion', 'ASC')->get();
+            $categorias = Categorias::orderBy('posicion', 'ASC')
+                ->where('activo', 1)
+                ->get();
 
             return ['success'=> 1, 'categorias'=> $categorias];
         }else{
@@ -96,7 +98,7 @@ class ApiCategoriaAfiliadoController extends Controller
             }
 
             // actualizar
-            Categorias::where('id', $request->idcategoria)->update(['activo' => $request->valor, 'nombre' => $request->nombre]);
+            Categorias::where('id', $request->idcategoria)->update(['visible' => $request->valor, 'nombre' => $request->nombre]);
 
             return ['success'=> 2];
         }else{
@@ -164,7 +166,7 @@ class ApiCategoriaAfiliadoController extends Controller
 
         if($p = Afiliados::where('id', $request->id)->first()){
 
-            $lista = Categorias::where('visible', 1)
+            $lista = Categorias::where('activo', 1)
                 ->orderBy('posicion', 'ASC')
                 ->get();
 
@@ -301,7 +303,7 @@ class ApiCategoriaAfiliadoController extends Controller
                 $cantidad = $p->cantidad;
                 $precio = $p->precio;
                 $multi = $cantidad * $precio;
-                $p->multiplicado = number_format((float)$multi, 2, '.', '');
+                $p->multiplicado = number_format((float)$multi, 2, '.', ',');
             }
 
             return ['success' => 1, 'productos' => $producto];
@@ -333,7 +335,7 @@ class ApiCategoriaAfiliadoController extends Controller
                 $cantidad = $p->cantidad;
                 $precio = $p->precio;
                 $multi = $cantidad * $precio;
-                $p->multiplicado = number_format((float)$multi, 2, '.', '');
+                $p->multiplicado = number_format((float)$multi, 2, '.', ',');
                 $p->descripcion = $p->descripcion;
             }
 
@@ -468,8 +470,10 @@ class ApiCategoriaAfiliadoController extends Controller
                 $o->fecha_orden = date("h:i A d-m-Y", strtotime($o->fecha_orden));
                 $o->fecha_2 = date("h:i A d-m-Y", strtotime($o->fecha_2));
                 $o->cliente = $infoCliente->nombre;
+                $o->direccion = $infoCliente->direccion;
+                $o->telefono = $infoCliente->telefono;
 
-                $o->precio_consumido = number_format((float)$o->precio_consumido, 2, '.', '');
+                $o->precio_consumido = number_format((float)$o->precio_consumido, 2, '.', ',');
             }
 
             return ['success' => 1, 'ordenes' => $orden];
@@ -545,10 +549,17 @@ class ApiCategoriaAfiliadoController extends Controller
                 $infoOrden = OrdenesDirecciones::where('ordenes_id', $o->id)->first();
 
                 $o->fecha_orden = date("h:i A ", strtotime($o->fecha_orden));
-                $o->fecha_3 = date("h:i A ", strtotime($o->fecha_3));
-                $o->fecha_6 = date("h:i A ", strtotime($o->fecha_6));
+                if($o->fecha_3 != null){
+                    $o->fecha_3 = date("h:i A ", strtotime($o->fecha_3));
+                }
+
+                if($o->fecha_5 != null){
+                    $o->fecha_5 = date("h:i A ", strtotime($o->fecha_5));
+                }
 
                 $o->cliente = $infoOrden->nombre;
+                $o->direccion = $infoOrden->direccion;
+                $o->telefono = $infoOrden->telefono;
 
                 $o->precio_consumido = number_format((float)$o->precio_consumido, 2, '.', ',');
             }

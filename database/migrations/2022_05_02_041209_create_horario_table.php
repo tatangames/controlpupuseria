@@ -18,7 +18,8 @@ class CreateHorarioTable extends Migration
             $table->time('hora1');
             $table->time('hora2');
             $table->integer('dia');
-            $table->boolean('cerrado')->default(0);
+            $table->boolean('cerrado');
+            $table->string('nombre', 25);
         });
     }
 

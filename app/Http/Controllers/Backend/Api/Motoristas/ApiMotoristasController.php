@@ -109,12 +109,14 @@ class ApiMotoristasController extends Controller
 
         if($validarDatos->fails()){return ['success' => 0]; }
 
-        if(Ordenes::where('id', $request->ordenid)->first()){
+        if($info = Ordenes::where('id', $request->ordenid)->first()){
 
             //sacar direccion de la orden
             $orden = OrdenesDirecciones::where('ordenes_id', $request->ordenid)->get();
 
-            return ['success' => 1, 'cliente' => $orden];
+            $venta = number_format((float)$info->precio_consumido, 2, '.', ',');
+
+            return ['success' => 1, 'cliente' => $orden, 'venta' => $venta];
         }else{
             return ['success' => 2];
         }
@@ -144,7 +146,7 @@ class ApiMotoristasController extends Controller
                 $cantidad = $p->cantidad;
                 $precio = $p->precio;
                 $multi = $cantidad * $precio;
-                $p->multiplicado = number_format((float)$multi, 2, '.', '');
+                $p->multiplicado = number_format((float)$multi, 2, '.', ',');
             }
             return ['success' => 1, 'productos' => $producto];
         }else{
@@ -168,48 +170,42 @@ class ApiMotoristasController extends Controller
 
             if($or = Ordenes::where('id', $request->ordenid)->first()){
 
-                // esta libre aun
-                if($or->estado_5 == 0){
-
-                    if($or->estado_7 == 1){
+                DB::beginTransaction();
+                try {
+                    if(MotoristasOrdenes::where('ordenes_id', $request->ordenid)->first()){
+                        // orden ya lo tiene un motorista
                         return ['success' => 1];
                     }
 
-                    DB::beginTransaction();
-                    try {
-                        // evitar orden con motorista ya asignado
-                        if(MotoristasOrdenes::where('ordenes_id', $request->ordenid)->first()){
-                            return ['success' => 2];
-                        }
-
-                        // ACTUALIZAR
-                        Ordenes::where('id', $request->ordenid)->update(['visible_m' => 1]);
-
-                        $fecha = Carbon::now('America/El_Salvador');
-
-                        $nueva = new MotoristasOrdenes();
-                        $nueva->ordenes_id = $or->id;
-                        $nueva->motoristas_id = $request->id;
-                        $nueva->fecha_agarrada = $fecha;
-
-                        $nueva->save();
-
-                        DB::commit();
-
-                        return ['success' => 3];
-
-                    } catch(\Throwable $e){
-                        DB::rollback();
-                        return ['success' => 5];
+                    if($or->estado_7 == 1){
+                        // orden cancelada
+                        return ['success' => 2];
                     }
-                }else{
-                    return ['success' => 2]; // orden ya agarrada por otro motorista
+
+                    // ACTUALIZAR
+                    Ordenes::where('id', $request->ordenid)->update(['visible_m' => 1]);
+                    $fecha = Carbon::now('America/El_Salvador');
+
+                    $nueva = new MotoristasOrdenes();
+                    $nueva->ordenes_id = $or->id;
+                    $nueva->motoristas_id = $request->id;
+                    $nueva->fecha_agarrada = $fecha;
+                    $nueva->save();
+
+                    DB::commit();
+
+                    return ['success' => 3];
+
+                } catch(\Throwable $e){
+                    DB::rollback();
+                    return ['success' => 5];
                 }
+
             }else{
-                return ['success' => 2]; // orden no encontrada
+                return ['success' => 5]; // orden no encontrada
             }
         }else{
-            return ['success' => 2]; // motorista no encontrado
+            return ['success' => 5]; // motorista no encontrado
         }
     }
 

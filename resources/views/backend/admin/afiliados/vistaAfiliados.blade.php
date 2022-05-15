@@ -68,7 +68,7 @@
 
                                 <div class="form-group">
                                     <label>Nombre</label>
-                                    <input type="text" maxlength="50" class="form-control" id="nombre-nuevo" placeholder="Nombre">
+                                    <input type="text" maxlength="50" autocomplete="off" class="form-control" id="nombre-nuevo" placeholder="Nombre">
                                 </div>
 
                                 <div class="form-group">
@@ -78,7 +78,7 @@
 
                                 <div class="form-group">
                                     <label>Contraseña</label>
-                                    <input type="text" maxlength="16" class="form-control" id="pass-nuevo" placeholder="12345678">
+                                    <input type="text" maxlength="16" autocomplete="off" class="form-control" id="pass-nuevo" placeholder="12345678">
                                 </div>
 
                             </div>
@@ -231,6 +231,7 @@
             var formData = new FormData();
             formData.append('nombre', nombre);
             formData.append('usuario', usuario);
+            formData.append('password', password);
 
             axios.post('/admin/afiliados/nuevo', formData, {
             })

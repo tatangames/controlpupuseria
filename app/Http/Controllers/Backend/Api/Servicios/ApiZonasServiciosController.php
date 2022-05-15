@@ -26,8 +26,10 @@ class ApiZonasServiciosController extends Controller
         if($data = Clientes::where('id', $request->id)->first()){
             if($data->activo == 0){
 
+                $mensaje = "Usuario ha sido bloqueado. Contactar a la administración";
+
                 // bloquear usuario
-                return ['success' => 1];
+                return ['success' => 1, 'mensaje' => $mensaje];
             }
         }
 

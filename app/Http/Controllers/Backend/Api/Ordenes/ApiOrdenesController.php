@@ -39,7 +39,7 @@ class ApiOrdenesController extends Controller
                 $o->direccion = $infoDireccion->direccion;
 
                 $sumado = $o->precio_consumido + $o->precio_envio;
-                $sumado = number_format((float)$sumado, 2, '.', '');
+                $sumado = number_format((float)$sumado, 2, '.', ',');
                 $o->total = $sumado;
             }
 
@@ -161,7 +161,7 @@ class ApiOrdenesController extends Controller
                 $cantidad = $p->cantidad;
                 $precio = $p->precio;
                 $multi = $cantidad * $precio;
-                $p->multiplicado = number_format((float)$multi, 2, '.', '');
+                $p->multiplicado = number_format((float)$multi, 2, '.', ',');
             }
 
             return ['success' => 1, 'productos' => $producto];
@@ -192,7 +192,7 @@ class ApiOrdenesController extends Controller
                 $cantidad = $p->cantidad;
                 $precio = $p->precio;
                 $multi = $cantidad * $precio;
-                $p->multiplicado = number_format((float)$multi, 2, '.', '');
+                $p->multiplicado = number_format((float)$multi, 2, '.', ',');
             }
 
             return ['success' => 1, 'productos' => $producto];

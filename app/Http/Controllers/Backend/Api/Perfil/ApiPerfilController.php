@@ -248,7 +248,6 @@ class ApiPerfilController extends Controller
                 $di->clientes_id = $request->id;
                 $di->nombre = $request->nombre;
                 $di->direccion = $request->direccion;
-                $di->numero_casa = $request->numero_casa;
                 $di->punto_referencia = $request->punto_referencia;
                 $di->seleccionado = 1;
                 $di->latitud = $request->latitud;
