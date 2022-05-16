@@ -22,7 +22,7 @@
 <section class="content-header">
     <div class="container-fluid">
         <div class="row">
-            <h1>Ordenes HOY: {{ $fecha }}</h1>
+            <h1>Ordenes</h1>
 
         </div>
 
@@ -117,7 +117,7 @@
 
     <script type="text/javascript">
         $(document).ready(function(){
-            var ruta = "{{ URL::to('/admin/ordenes-hoy/tabla/lista') }}";
+            var ruta = "{{ URL::to('/admin/ordenes/tabla/lista') }}";
             $('#tablaDatatable').load(ruta);
         });
     </script>
@@ -125,7 +125,7 @@
     <script>
 
         function recargar(){
-            var ruta = "{{ url('/admin/ordenes-hoy/tabla/lista') }}";
+            var ruta = "{{ url('/admin/ordenes/tabla/lista') }}";
             $('#tablaDatatable').load(ruta);
         }
 

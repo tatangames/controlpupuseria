@@ -45,11 +45,7 @@
                                             <i class="fas fa-edit" title="Direcciones"></i> Direcciones
                                         </button>
 
-                                        <button type="button" class="btn btn-warning btn-xs" onclick="verHistorial({{ $dato->id }})">
-                                            <i class="fas fa-edit" title="Historial"></i> Historial
-                                        </button>
                                     </td>
-
 
                                 </tr>
                             @endforeach

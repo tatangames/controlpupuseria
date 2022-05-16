@@ -7,6 +7,7 @@ use App\Models\Motoristas;
 use App\Models\MotoristasOrdenes;
 use App\Models\Ordenes;
 use App\Models\OrdenesDirecciones;
+use App\Models\Zonas;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -229,9 +230,9 @@ class ApiMotoristasController extends Controller
                 ->join('ordenes AS o', 'o.id', '=', 'mo.ordenes_id')
                 ->select('o.id', 'o.precio_consumido', 'o.fecha_4', 'o.hora_2',
                     'o.estado_5', 'o.estado_6', 'o.precio_envio',
-                    'o.estado_7', 'o.visible_m', 'o.nota')
+                    'o.estado_7', 'o.visible_m', 'o.nota', 'o.fecha_orden')
                 ->where('o.estado_6', 0) // aun sin entregar al cliente
-                ->where('o.visible_m', 1) // para ver si una orden fue cancelada a los 10 minutos, y el motorista la agarro, asi ver el estado
+                ->where('o.visible_m', 1) // para ver si una orden fue cancelada, y el motorista la agarro, asi ver el estado
                 ->where('o.estado_4', 0) // aun no han salido a entregarse
                 ->where('mo.motoristas_id', $request->id)
                 ->get();
@@ -239,14 +240,11 @@ class ApiMotoristasController extends Controller
             // sumar mas envio
             foreach($orden as $o) {
 
-                // buscar metodo de pago
-                $infoOrdenes = OrdenesDirecciones::where('ordenes_id', $o->id)->first();
-
                 $suma = $o->precio_consumido + $o->precio_envio;
                 $o->precio_consumido = number_format((float)$suma, 2, '.', ',');
                 $o->precio_envio = number_format((float)$o->precio_envio, 2, '.', ',');
 
-
+                $o->fecha_orden = date("d-m-Y h:i A", strtotime($o->fecha_orden));
             }
 
             return ['success' => 1, 'ordenes' => $orden];
@@ -410,18 +408,18 @@ class ApiMotoristasController extends Controller
             $orden = DB::table('motoristas_ordenes AS mo')
                 ->join('ordenes AS o', 'o.id', '=', 'mo.ordenes_id')
                 ->select('o.id', 'o.precio_consumido', 'o.fecha_4', 'o.hora_2',
-                    'o.estado_5', 'o.estado_6', 'o.precio_envio','o.estado_7', 'o.visible_m',
+                    'o.precio_envio','o.estado_7', 'o.visible_m', 'o.fecha_orden',
                     'o.nota')
-                ->where('o.estado_5', 0) // aun sin entregar al cliente
-                ->where('o.visible_m', 1) // para ver si una orden fue cancelada a los 10 minutos, y el motorista la agarro, asi ver el estado
-                ->where('o.estado_5', 1) // van a entregarse
+                ->where('o.estado_4', 1) // motorista inicio entrega
+                ->where('o.estado_7', 0) // orden no cancelada
+                ->where('o.visible_m', 1) // para ver si una orden fue cancelada, y el motorista la agarro, asi ver el estado
                 ->where('mo.motoristas_id', $request->id)
                 ->get();
 
             // sumar mas envio
             foreach($orden as $o){
                 $o->fecha_orden = date("h:i A d-m-Y", strtotime($o->fecha_orden));
-                $total = $o->precio_consumido - $o->precio_envio;
+                $total = $o->precio_consumido + $o->precio_envio;
                 $o->total = number_format((float)$total, 2, '.', ',');
             }
 
@@ -430,4 +428,107 @@ class ApiMotoristasController extends Controller
             return ['success' => 2];
         }
     }
+
+    public function finalizarEntrega(Request $request){
+
+        // validaciones para los datos
+        $reglaDatos = array(
+            'ordenid' => 'required'
+        );
+
+        $validarDatos = Validator::make($request->all(), $reglaDatos);
+
+        if($validarDatos->fails()){return ['success' => 0]; }
+
+        if($or = Ordenes::where('id', $request->ordenid)->first()){
+
+            // si al orden no ha sido cancelada
+            if($or->estado_7 == 1){
+                return ['success' => 1];
+            }
+
+            $fecha = Carbon::now('America/El_Salvador');
+
+            Ordenes::where('id', $request->ordenid)->update(['estado_5' => 1,
+                'fecha_5' => $fecha, 'visible_m' => 0]);
+
+            return ['success' => 2]; // orden completada
+        }else{
+            return ['success' => 3];
+        }
+    }
+
+
+    public function verHistorial(Request $request){
+        $reglaDatos = array(
+            'id' => 'required',
+            'fecha1' => 'required',
+            'fecha2' => 'required'
+        );
+
+        $validarDatos = Validator::make($request->all(), $reglaDatos );
+
+        if($validarDatos->fails()){return ['success' => 0]; }
+
+        if(Motoristas::where('id', $request->id)->first()){
+
+            $start = Carbon::parse($request->fecha1)->startOfDay();
+            $end = Carbon::parse($request->fecha2)->endOfDay();
+
+            $orden = DB::table('motoristas_ordenes AS m')
+                ->join('ordenes AS o', 'o.id', '=', 'm.ordenes_id')
+                ->select('o.id', 'o.precio_consumido', 'o.precio_envio', 'o.fecha_orden',
+                    'm.motoristas_id', 'o.estado_7', 'o.nota', 'o.estado_5')
+                ->where('m.motoristas_id', $request->id) // del motorista
+                ->whereBetween('o.fecha_orden', [$start, $end])
+                ->orderBy('o.id', 'DESC')
+                ->get();
+
+            $totalOrdenes = 0;
+            $totalCobrado = 0; // precio envio + venta
+            foreach($orden as $o){
+                $totalOrdenes++;
+
+                $o->fecha_orden = date("h:i A d-m-Y", strtotime($o->fecha_orden));
+
+                if($o->estado_5 == 1){
+                    $o->estado = "Orden Entregada";
+                }
+                else if($o->estado_7 == 1){
+                    $o->estado = "Orden Cancelada";
+                }else{
+                    $o->estado = "";
+                }
+
+                $total = $o->precio_envio + $o->precio_consumido;
+                $totalCobrado = $totalCobrado + $total;
+                $o->precio_envio = number_format((float)$o->precio_envio, 2, '.', ',');
+                $o->total = number_format((float)$total, 2, '.', ',');
+
+                $infoCliente = OrdenesDirecciones::where('ordenes_id', $o->id)->first();
+
+                $o->cliente = $infoCliente->nombre;
+                $o->direccion = $infoCliente->direccion;
+                $o->puntoref = $infoCliente->punto_referencia;
+                $o->telefono = $infoCliente->telefono;
+
+                $infoZona = Zonas::where('id', $infoCliente->zonas_id)->first();
+
+                $o->zona = $infoZona->nombre;
+            }
+
+            $totalCobrado = number_format((float)$totalCobrado, 2, '.', ',');
+
+            return ['success' => 1,
+                'historial' => $orden,
+                'ventaenvio' => $totalCobrado,
+                'conteo' => $totalOrdenes
+            ];
+
+        }else{
+            return ['success' => 2];
+        }
+    }
+
+
 }

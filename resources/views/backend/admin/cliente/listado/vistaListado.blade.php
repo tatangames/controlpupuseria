@@ -200,11 +200,6 @@
                 });
         }
 
-        function verHistorial(){
-            var id = document.getElementById('id-global').value;
-            window.location.href="{{ url('/admin/cliente/historial') }}/"+id;
-        }
-
         function verDirecciones(id){
             window.location.href="{{ url('/admin/cliente/lista/direcciones') }}/"+id;
         }

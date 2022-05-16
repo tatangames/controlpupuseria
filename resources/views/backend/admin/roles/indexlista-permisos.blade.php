@@ -179,7 +179,7 @@
             formData.append('nombre', nombre);
             formData.append('descripcion', descripcion);
 
-            axios.post(url+'/permisos/extra-nuevo', formData, {
+            axios.post('/admin/permisos/extra-nuevo', formData, {
             })
                 .then((response) => {
                     closeLoading()
@@ -218,7 +218,7 @@
             var formData = new FormData();
             formData.append('idpermiso', idpermiso);
 
-            axios.post(url+'/permisos/extra-borrar', formData, {
+            axios.post('/admin/permisos/extra-borrar', formData, {
             })
                 .then((response) => {
                     closeLoading()

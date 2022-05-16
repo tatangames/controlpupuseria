@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Backend\Api\Ordenes;
 
 use App\Http\Controllers\Controller;
 use App\Models\Clientes;
+use App\Models\MotoristasExperiencia;
+use App\Models\MotoristasOrdenes;
 use App\Models\Ordenes;
 use App\Models\OrdenesDescripcion;
 use App\Models\OrdenesDirecciones;
@@ -196,6 +198,137 @@ class ApiOrdenesController extends Controller
             }
 
             return ['success' => 1, 'productos' => $producto];
+        }else{
+            return ['success' => 2];
+        }
+    }
+
+    public function verHistorial(Request $request){
+        $reglaDatos = array(
+            'id' => 'required',
+            'fecha1' => 'required',
+            'fecha2' => 'required'
+        );
+
+        $validarDatos = Validator::make($request->all(), $reglaDatos );
+
+        if($validarDatos->fails()){return ['success' => 0]; }
+
+        if(Clientes::where('id', $request->id)->first()){
+
+            $start = Carbon::parse($request->fecha1)->startOfDay();
+            $end = Carbon::parse($request->fecha2)->endOfDay();
+
+            $orden = Ordenes::where('clientes_id', $request->id)
+                ->whereBetween('fecha_orden', [$start, $end])
+                ->orderBy('id', 'DESC')
+                ->get();
+
+            foreach($orden as $o){
+
+                $o->fecha_orden = date("h:i A d-m-Y", strtotime($o->fecha_orden));
+
+                if($o->estado_5 == 1){
+                    $o->estado = "Orden Entregada";
+                }
+                else if($o->estado_7 == 1){
+
+                    if($o->cancelado == 2){
+                        // propietario
+                        if($o->mensaje_7 != null){
+                            $o->estado = "Orden Cancelada: " + $o->mensaje7;
+                        }else{
+                            $o->estado = "Orden Cancelada";
+                        }
+                    }else{
+                        $o->estado = "Orden Cancelada";
+                    }
+                }
+
+                $total = $o->precio_envio + $o->precio_consumido;
+                $o->precio_envio = number_format((float)$o->precio_envio, 2, '.', ',');
+                $o->total = number_format((float)$total, 2, '.', ',');
+
+                $infoCliente = OrdenesDirecciones::where('ordenes_id', $o->id)->first();
+                $o->direccion = $infoCliente->direccion;
+            }
+
+
+
+            return ['success' => 1, 'historial' => $orden];
+
+        }else{
+            return ['success' => 2];
+        }
+    }
+
+    public function verProductosOrdenHistorial(Request $request){
+        // validaciones para los datos
+        $reglaDatos = array(
+            'ordenid' => 'required',
+        );
+
+        $validarDatos = Validator::make($request->all(), $reglaDatos );
+
+        if($validarDatos->fails()){return ['success' => 0]; }
+
+        if(Ordenes::where('id', $request->ordenid)->first()){
+
+            $producto = DB::table('ordenes AS o')
+                ->join('ordenes_descripcion AS od', 'od.ordenes_id', '=', 'o.id')
+                ->join('producto AS p', 'p.id', '=', 'od.producto_id')
+                ->select('od.id AS productoID', 'p.nombre', 'od.nota',
+                    'p.imagen', 'p.utiliza_imagen', 'od.precio', 'od.cantidad')
+                ->where('o.id', $request->ordenid)
+                ->get();
+
+            foreach($producto as $p){
+                $cantidad = $p->cantidad;
+                $precio = $p->precio;
+                $multi = $cantidad * $precio;
+                $p->multiplicado = number_format((float)$multi, 2, '.', ',');
+            }
+            return ['success' => 1, 'productos' => $producto];
+        }else{
+            return ['success' => 3];
+        }
+    }
+
+    public function calificarEntrega(Request $request){
+
+        $reglaDatos = array(
+            'ordenid' => 'required',
+            'valor' => 'required'
+        );
+
+        $validarDatos = Validator::make($request->all(), $reglaDatos);
+
+        if($validarDatos->fails()){return ['success' => 0]; }
+
+        if($or = Ordenes::where('id', $request->ordenid)->first()){
+
+            if(MotoristasExperiencia::where('ordenes_id', $or->id)->first()){
+               return ['success' => 1]; // ya hay una valoracion
+            }
+
+            // sacar id del motorista de la orden
+            $motoristaDato = MotoristasOrdenes::where('ordenes_id', $or->id)->first();
+
+            $idMotorista = $motoristaDato->motoristas_id;
+            $fecha = Carbon::now('America/El_Salvador');
+
+            $nueva = new MotoristasExperiencia();
+            $nueva->ordenes_id = $or->id;
+            $nueva->motoristas_id = $idMotorista;
+            $nueva->experiencia = $request->valor;
+            $nueva->mensaje = $request->mensaje;;
+            $nueva->fecha = $fecha;
+            $nueva->save();
+
+            // ocultar orden al usuario
+            Ordenes::where('id', $or->id)->update(['visible' => 0]);
+
+            return ['success' => 1];
         }else{
             return ['success' => 2];
         }

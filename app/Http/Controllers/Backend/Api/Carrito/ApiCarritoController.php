@@ -62,7 +62,7 @@ class ApiCarritoController extends Controller
                         $precio = $pro->cantidad * $pro->precio;
 
                         // convertir
-                        $valor = number_format((float)$precio, 2, '.', '');
+                        $valor = number_format((float)$precio, 2, '.', ',');
 
                         $pro->precio = $valor;
                     }
@@ -75,7 +75,7 @@ class ApiCarritoController extends Controller
 
                     return [
                         'success' => 1,
-                        'subtotal' => number_format((float)$subTotal, 2, '.', ''), // subtotal
+                        'subtotal' => number_format((float)$subTotal, 2, '.', ','), // subtotal
                         'estadoProductoGlobal' => $estadoProductoGlobal, // saver si producto esta activo
                         'producto' => $producto, //todos los productos
                     ];
@@ -298,12 +298,12 @@ class ApiCarritoController extends Controller
                 $total = $resultado + $envioPrecio;
 
                 $total = number_format((float)$total, 2, '.', '');
-                $envioPrecio = number_format((float)$envioPrecio, 2, '.', '');
+                $envioPrecio = number_format((float)$envioPrecio, 2, '.', ',');
 
                 return [
                     'success' => 2,
                     'total' => $total,
-                    'subtotal' => number_format((float)$resultado, 2, '.', ''),
+                    'subtotal' => number_format((float)$resultado, 2, '.', ','),
                     'envio' => $envioPrecio,
                     'direccion' => $infoDireccion->direccion,
                 ];

@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 // Cliente
@@ -16,14 +15,14 @@ use App\Http\Controllers\Backend\Api\Motoristas\ApiMotoristasController;
 use App\Http\Controllers\Backend\Api\Afiliados\ApiAfiliadosController;
 use App\Http\Controllers\Backend\Api\Afiliados\ApiCategoriaAfiliadoController;
 
-// registro de cliente nuevo
+// --- CLIENTES ---
 Route::post('cliente/registro', [ApiRegistroController::class, 'registroCliente']);
 Route::post('cliente/login', [ApiClienteController::class, 'loginCliente']);
 Route::post('cliente/enviar/codigo-correo', [ApiClienteController::class, 'enviarCodigoCorreo']);
 Route::post('cliente/verificar/codigo-correo-password', [ApiClienteController::class, 'verificarCodigoCorreoPassword']);
 Route::post('cliente/actualizar/password', [ApiClienteController::class, 'actualizarPasswordCliente']);
 
-// perfil
+// --- PERFIL ---
 Route::post('cliente/informacion', [ApiPerfilController::class, 'informacionPerfil']);
 Route::post('cliente/editar-perfil', [ApiPerfilController::class, 'editarPerfil']);
 Route::post('cliente/listado/direcciones', [ApiPerfilController::class, 'listadoDeDirecciones']);
@@ -33,11 +32,9 @@ Route::get('listado/zonas/poligonos', [ApiPerfilController::class, 'puntosZonaPo
 Route::post('cliente/nueva/direccion', [ApiPerfilController::class, 'nuevaDireccionCliente']);
 Route::post('cliente/perfil/cambiar-password', [ApiPerfilController::class, 'cambiarPasswordPerfil']);
 
-
-// bloque servicios
+// --- BLOQUE DE SERVICIOS ---
 Route::post('cliente/lista/servicios-bloque', [ApiZonasServiciosController::class, 'listadoBloque']);
 
-// productos vertical
 Route::post('cliente/servicios/listado/menu', [ApiServiciosController::class, 'listadoMenuVertical']);
 Route::post('cliente/informacion/producto', [ApiProductosController::class, 'infoProductoIndividual']);
 Route::post('cliente/carrito/producto/agregar', [ApiProductosController::class, 'agregarProductoCarritoTemporal']);
@@ -57,11 +54,13 @@ Route::post('cliente/proceso/orden/cancelar',  [ApiOrdenesController::class, 'ca
 Route::post('cliente/listado/productos/ordenes',  [ApiOrdenesController::class, 'listadoProductosOrdenes']);
 Route::post('cliente/listado/productos/ordenes-individual',  [ApiOrdenesController::class, 'listadoProductosOrdenesIndividual']);
 
-// eventos
+// --- EVENTOS ----
 Route::get('cliente/eventos/listado', [ApiServiciosController::class, 'listadoEventos']);
 Route::post('cliente/eventos-imagen/listado', [ApiServiciosController::class, 'listadoEventosImagenes']);
+Route::post('cliente/ver/historial', [ApiOrdenesController::class, 'verHistorial']);
+Route::post('cliente/ver/productos/historial',  [ApiOrdenesController::class, 'verProductosOrdenHistorial']);
 
-
+Route::post('cliente/proceso/calificar/entrega',  [ApiOrdenesController::class, 'calificarEntrega']);
 
 
 // ****--------------  AFILIADOS  ---------------- **** //
@@ -98,9 +97,11 @@ Route::post('afiliado/informacion/orden/preparando', [ApiCategoriaAfiliadoContro
 Route::post('afiliado/finalizar/orden', [ApiCategoriaAfiliadoController::class, 'finalizarOrden']);
 Route::post('afiliado/ordenes/completadas/hoy', [ApiCategoriaAfiliadoController::class, 'listadoOrdenesCompletadasHoy']);
 
+Route::post('afiliado/historial/ordenes', [ApiCategoriaAfiliadoController::class, 'historialOrdenesCompletas']);
 
 
 
+// ****--------------  MOTORISTAS  ---------------- **** //
 Route::post('motorista/login', [ApiMotoristasController::class, 'loginMotorista']);
 Route::post('motorista/ver/nueva/ordenes', [ApiMotoristasController::class, 'verNuevasOrdenes']);
 Route::post('motorista/ver/orden/id', [ApiMotoristasController::class, 'verOrdenPorID']);
@@ -114,6 +115,8 @@ Route::post('motorista/guadar/configuracion', [ApiMotoristasController::class, '
 Route::post('motorista/info/cuenta', [ApiMotoristasController::class, 'informacionCuenta']);
 Route::post('motorista/actualizar/password', [ApiMotoristasController::class, 'actualizarPassword']);
 Route::post('motorista/orden/procesoentrega', [ApiMotoristasController::class, 'verProcesoOrdenesEntrega']);
+Route::post('motorista/finalizar/entrega', [ApiMotoristasController::class, 'finalizarEntrega']);
+Route::post('motorista/ver/historial', [ApiMotoristasController::class, 'verHistorial']);
 
 
 

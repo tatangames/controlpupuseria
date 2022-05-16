@@ -8,37 +8,24 @@
                         <table id="tabla" class="table table-bordered table-striped">
                             <thead>
                             <tr>
-                                <th>Orden</th>
-                                <th>Fecha</th>
-                                <th>Venta</th>
-                                <th>Envío</th>
-                                <th>Cliente</th>
-                                <th>Estado</th>
-                                <th>Calificación</th>
-                                <th>Opciones</th>
+                                <th>Producto</th>
+                                <th>Nota</th>
+                                <th>Cantidad</th>
+                                <th>Precio</th>
+                                <th>Total</th>
                             </tr>
                             </thead>
                             <tbody>
 
-                            @foreach($ordenes as $dato)
+                            @foreach($lista as $dato)
                                 <tr>
 
-                                    <td>{{ $dato->id }}</td>
-                                    <td>{{ $dato->fecha_orden }}</td>
-                                    <td>{{ $dato->precio_consumido }}</td>
-                                    <td>{{ $dato->precio_envio }}</td>
-                                    <td>{{ $dato->cliente }}</td>
-                                    <td>{{ $dato->estado }}</td>
-                                    <td>{{ $dato->calificacion }}</td>
-                                    <td>
-                                        <button type="button" class="btn btn-primary btn-xs" onclick="informacion({{ $dato->id }})">
-                                            <i class="fas fa-eye" title="Cliente"></i>&nbsp; Cliente
-                                        </button>
+                                    <td>{{ $dato->nombre }}</td>
+                                    <td>{{ $dato->nota }}</td>
+                                    <td>{{ $dato->cantidad }}</td>
+                                    <td>{{ $dato->precio }}</td>
+                                    <td>{{ $dato->total }}</td>
 
-                                        <button type="button" class="btn btn-success btn-xs" onclick="informacionProducto({{ $dato->id }})">
-                                            <i class="fas fa-shopping-cart" title="Productos"></i>&nbsp; Productos
-                                        </button>
-                                    </td>
                                 </tr>
                             @endforeach
 

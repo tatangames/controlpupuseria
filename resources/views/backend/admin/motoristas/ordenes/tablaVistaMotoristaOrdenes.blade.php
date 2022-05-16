@@ -8,35 +8,27 @@
                         <table id="tabla" class="table table-bordered table-striped">
                             <thead>
                             <tr>
-                                <th>Orden</th>
-                                <th>Fecha</th>
-                                <th>Venta</th>
-                                <th>Envío</th>
-                                <th>Cliente</th>
-                                <th>Estado</th>
-                                <th>Calificación</th>
+                                <th># Orden</th>
+                                <th>Fecha Orden</th>
+                                <th>Motorista</th>
+                                <th>Usuario</th>
+                                <th>Estado (Entregada / Cancelada)</th>
                                 <th>Opciones</th>
                             </tr>
                             </thead>
                             <tbody>
 
-                            @foreach($ordenes as $dato)
+                            @foreach($motoristas as $dato)
                                 <tr>
-
-                                    <td>{{ $dato->id }}</td>
+                                    <td>{{ $dato->orden }}</td>
                                     <td>{{ $dato->fecha_orden }}</td>
-                                    <td>{{ $dato->precio_consumido }}</td>
-                                    <td>{{ $dato->precio_envio }}</td>
-                                    <td>{{ $dato->cliente }}</td>
+                                    <td>{{ $dato->nombre }}</td>
+                                    <td>{{ $dato->usuario }}</td>
                                     <td>{{ $dato->estado }}</td>
-                                    <td>{{ $dato->calificacion }}</td>
-                                    <td>
-                                        <button type="button" class="btn btn-primary btn-xs" onclick="informacion({{ $dato->id }})">
-                                            <i class="fas fa-eye" title="Cliente"></i>&nbsp; Cliente
-                                        </button>
 
-                                        <button type="button" class="btn btn-success btn-xs" onclick="informacionProducto({{ $dato->id }})">
-                                            <i class="fas fa-shopping-cart" title="Productos"></i>&nbsp; Productos
+                                    <td>
+                                        <button type="button" class="btn btn-primary btn-xs" onclick="verInformacion({{ $dato->id }})">
+                                            <i class="fas fa-eye" title="Editar"></i>&nbsp; Editar
                                         </button>
                                     </td>
                                 </tr>
@@ -93,7 +85,6 @@
             "responsive": true, "lengthChange": true, "autoWidth": false,
         });
     });
-
 
 
 </script>

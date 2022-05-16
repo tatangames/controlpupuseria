@@ -22,8 +22,7 @@
 <section class="content-header">
     <div class="container-fluid">
         <div class="row">
-            <h1>Ordenes HOY: {{ $fecha }}</h1>
-
+            <h1>Ordenes Motoristas</h1>
         </div>
 
     </div>
@@ -33,7 +32,7 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-header" id="card-header-color">
-                <h3 class="card-title" style="color: white">Listado de Ordenes</h3>
+                <h3 class="card-title" style="color: white">Lista de Ordenes Seleccionadas</h3>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -47,61 +46,45 @@
     </div>
 </section>
 
-
-
-<div class="modal fade" id="modalCliente" style="z-index:1000000000">
-    <div class="modal-dialog">
+<!-- modal editar -->
+<div class="modal fade" id="modalEditar">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Cliente</h4>
+                <h4 class="modal-title">Editar Orden Motorista</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form id="formulario-cliente">
+                <form id="formulario-editar">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
 
                                 <div class="form-group">
-                                    <label>Zona</label>
-                                    <input type="text" readonly class="form-control" id="zona">
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Nombre</label>
-                                    <input type="text" readonly class="form-control" id="nombre">
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Dirección</label>
-                                    <input type="text" readonly class="form-control" id="direccion">
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Punto de Referencia</label>
-                                    <input type="text" readonly class="form-control" id="puntoref">
-                                </div>
-
-
-                                <div class="form-group">
-                                    <label>Teléfono</label>
-                                    <input type="text" readonly class="form-control" id="telefono">
+                                    <label style="color:#191818">Motorista</label>
+                                    <input type="hidden" id="id-editar">
+                                    <br>
+                                    <div>
+                                        <select class="form-control" id="select-motorista">
+                                        </select>
+                                    </div>
                                 </div>
 
                             </div>
+
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="btnGuardar" onclick="editar()">Guardar</button>
             </div>
         </div>
     </div>
 </div>
-
 
 
 @extends('backend.menus.footerjs')
@@ -117,7 +100,7 @@
 
     <script type="text/javascript">
         $(document).ready(function(){
-            var ruta = "{{ URL::to('/admin/ordenes-hoy/tabla/lista') }}";
+            var ruta = "{{ URL::to('/admin/motoristas-ordenes/tabla/lista') }}";
             $('#tablaDatatable').load(ruta);
         });
     </script>
@@ -125,44 +108,75 @@
     <script>
 
         function recargar(){
-            var ruta = "{{ url('/admin/ordenes-hoy/tabla/lista') }}";
+            var ruta = "{{ url('/admin/motoristas-ordenes/tabla/lista') }}";
             $('#tablaDatatable').load(ruta);
         }
 
-        function informacion(id){
-            openLoading();
-            document.getElementById("formulario-cliente").reset();
+        function verInformacion(id){
 
-            axios.post('/admin/ordenes/informacion',{
+            openLoading();
+            document.getElementById("formulario-editar").reset();
+
+            axios.post('/admin/motoristas-ordenes/informacion',{
                 'id': id
             })
                 .then((response) => {
                     closeLoading();
 
                     if(response.data.success === 1){
-                        $('#zona').val(response.data.zona);
-                        $.each(response.data.cliente, function( key, val ){
-                            $('#nombre').val(val.nombre);
-                            $('#direccion').val(val.direccion);
-                            $('#telefono').val(val.telefono)
-                            $('#puntoref').val(val.punto_referencia)
+
+                        $('#modalEditar').modal('show');
+                        $('#id-editar').val(id);
+
+                        document.getElementById("select-motorista").options.length = 0;
+
+                        $.each(response.data.motoristas, function( key, val ){
+
+                            if(response.data.idmoto == val.id){
+                                $('#select-motorista').append('<option value="' +val.id +'" selected="selected">'+val.nombre+'</option>');
+                            }else{
+                                $('#select-motorista').append('<option value="' +val.id +'">'+val.nombre+'</option>');
+                            }
                         });
 
-                        $('#modalCliente').modal('show');
                     }else{
-                        toastr.error('Información no encontrada');
+                        toastr.error('Error al Buscar');
                     }
                 })
                 .catch((error) => {
+                    toastr.error('Error al Buscar');
                     closeLoading();
-                    toastr.error('Información no encontrada');
                 });
         }
 
-        function informacionProducto(id){
-            window.location.href="{{ url('/admin/productos/ordenes') }}/"+id;
-        }
+        function editar() {
+            var id = document.getElementById('id-editar').value;
+            var idmoto = document.getElementById('select-motorista').value;
 
+            openLoading();
+
+            let formData = new FormData();
+            formData.append('id', id);
+            formData.append('idmoto', idmoto);
+
+            axios.post('/admin/motoristas-ordenes/editar', formData, {
+            })
+                .then((response) => {
+                    closeLoading();
+
+                    if (response.data.success === 1) {
+                        $('#modalEditar').modal('hide');
+                        toastr.success('Información Actualizada');
+                        recargar();
+                    } else {
+                        toastr.error('Error al Editar');
+                    }
+                })
+                .catch((error) => {
+                    toastr.error('Error al Editar');
+                    closeLoading();
+                });
+        }
 
     </script>
 

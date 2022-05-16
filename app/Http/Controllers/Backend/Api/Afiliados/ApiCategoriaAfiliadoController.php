@@ -570,4 +570,66 @@ class ApiCategoriaAfiliadoController extends Controller
         }
     }
 
+
+    // historial de ordenes propietarios
+    public function historialOrdenesCompletas(Request $request){
+        $reglaDatos = array(
+            'id' => 'required',
+            'fecha1' => 'required',
+            'fecha2' => 'required'
+        );
+
+        $validarDatos = Validator::make($request->all(), $reglaDatos);
+
+        if($validarDatos->fails()){return ['success' => 0]; }
+
+        if($p = Afiliados::where('id', $request->id)->first()){
+
+            $date1 = Carbon::parse($request->fecha1)->startOfDay();
+            $date2 = Carbon::parse($request->fecha2)->endOfDay();
+
+            // todas las ordenes por fecha
+            $orden = Ordenes::whereBetween('fecha_orden', array($date1, $date2))->get();
+
+            $conteoOrden = 0;
+            $vendido = 0;
+            foreach($orden as $o){
+                $conteoOrden++;
+
+                $o->fecha_orden = date("d-m-Y h:i A", strtotime($o->fecha_orden));
+
+                if($o->estado_4 == 1){
+                    $o->estado = "Orden En Entrega";
+                }
+                else if($o->estado_ == 5){
+                    $o->estado = "Orden Entregada";
+                }
+                else if($o->estado_ == 7){
+                    if($o->cancelado == 1){
+                        $o->estado = "Orden Cancelada Por: Cliente";
+                    }else{
+                        $o->estado = "Orden Cancelada Por: Propietario";
+                    }
+                }else{
+                    $o->estado = "";
+                }
+                $vendido = $vendido + $o->precio_consumido;
+                $o->precio_consumido = number_format((float)$o->precio_consumido, 2, '.', ',');
+                $infoCliente = OrdenesDirecciones::where('ordenes_id', $o->id)->first();
+                $o->cliente = $infoCliente->nombre;
+                $o->direccion = $infoCliente->direccion;
+                $o->puntoref = $infoCliente->punto_referencia;
+                $o->telefono = $infoCliente->telefono;
+            }
+
+            $vendido = number_format((float)$vendido, 2, '.', ',');
+
+            return ['success' => 1, 'ordenes' => $orden,
+                'conteo' => $conteoOrden,
+                'total' => $vendido];
+        }else{
+            return ['success' => 2];
+        }
+    }
+
 }

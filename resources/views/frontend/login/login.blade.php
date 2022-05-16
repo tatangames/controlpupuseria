@@ -155,22 +155,22 @@
         var password = document.getElementById('password').value;
 
         if(usuario === ''){
-            toastMensaje("error", "Usuario es requerido");
+            toastr.error("Usuario es requerido");
             return;
         }
 
         if(password === ''){
-            toastMensaje("error", "Contraseña es requerido");
+            toastr.error("Contraseña es requerido");
             return;
         }
 
         if(usuario.length > 50){
-            toastMensaje("error", "Máximo 50 caracteres");
+            toastr.error("Máximo 50 caracteres");
             return;
         }
 
         if(password.length > 16){
-            toastMensaje("error", "Máximo 16 caracteres");
+            toastr.error("Máximo 16 caracteres");
             return;
         }
 
@@ -183,32 +183,31 @@
         axios.post('/login', formData, {
         })
             .then((response) => {
-                console.log(response);
                 closeLoading()
                 verificar(response);
             })
             .catch((error) => {
                 closeLoading()
-                toastMensaje("error", "Error en la respuesta");
+                toastr.error("Error en la respuesta");
             });
     }
 
     function verificar(response) {
 
         if (response.data.success === 0) {
-            toastMensaje("error", "Validación incorrecta");
+            toastr.error("Validación incorrecta");
         } else if (response.data.success === 1) {
             window.location = response.data.ruta;
         } else if (response.data.success === 2) {
-            toastMensaje("error", "Contraseña incorrecta");
+            toastr.error("Contraseña incorrecta");
         }else if (response.data.success === 3) {
-            toastMensaje("error", "Usuario no encontrado");
+            toastr.error("Usuario no encontrado");
         }
         else if (response.data.success === 4) {
-            alertaMensaje('warning' ,'Usuario Bloqueado', 'Contactar al Administrador');
+            toastr.error('Usuario Bloqueado. Contactar al Administrador');
         }
         else {
-            toastMensaje("error", "Error");
+            toastr.error('Error');
         }
     }
 

@@ -54,7 +54,6 @@ class PermisosController extends Controller
 
             $idrol = $info->roles->pluck('id');
 
-
             return ['success' => 1,
                 'info' => $info,
                 'roles' => $roles,
@@ -73,6 +72,13 @@ class PermisosController extends Controller
                 return ['success' => 1];
             }
 
+            // usuario 1 no puede ser desactivado
+            if($request->id == 1){
+                if($request->toggle == 0){
+                    return ['success' => 2];
+                }
+            }
+
             $usuario = Usuarios::find($request->id);
             $usuario->nombre = $request->nombre;
             $usuario->usuario = $request->usuario;
@@ -89,9 +95,9 @@ class PermisosController extends Controller
 
             $usuario->save();
 
-            return ['success' => 2];
-        }else{
             return ['success' => 3];
+        }else{
+            return ['success' => 4];
         }
     }
 

@@ -72,11 +72,6 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label>Apellido</label>
-                                        <input type="text" maxlength="50" class="form-control" id="apellido-nuevo" placeholder="Apellido">
-                                    </div>
-
-                                    <div class="form-group">
                                         <label>Usuario</label>
                                         <input type="text" maxlength="50" class="form-control" id="usuario-nuevo" placeholder="Usuario">
                                     </div>
@@ -266,7 +261,7 @@
             formData.append('password', password);
             formData.append('rol', idrol);
 
-            axios.post(url+'/permisos/nuevo-usuario', formData, {
+            axios.post('/admin/permisos/nuevo-usuario', formData, {
             })
                 .then((response) => {
 
@@ -294,7 +289,7 @@
             openLoading();
             document.getElementById("formulario-editar").reset();
 
-            axios.post(url+'/permisos/info-usuario',{
+            axios.post('/admin/permisos/info-usuario',{
                 'id': id
             })
                 .then((response) => {
@@ -323,13 +318,13 @@
                         }
 
                     }else{
-                        toastMensaje('error', 'Información no encontrado');
+                        toastr.error('Información no encontrado');
                     }
 
                 })
                 .catch((error) => {
                     closeLoading()
-                    toastMensaje('error', 'Información no encontrado');
+                    toastr.error('Información no encontrado');
                 });
         }
 
@@ -384,26 +379,29 @@
             formData.append('toggle', toggle);
             formData.append('rol', idrol);
 
-            axios.post(url+'/permisos/editar-usuario', formData, {
+            axios.post('/admin/permisos/editar-usuario', formData, {
             })
                 .then((response) => {
                     closeLoading()
 
                     if (response.data.success === 1) {
-                        toastMensaje('error', 'El Usuario ya existe');
+                        toastr.error('El Usuario ya existe');
                     }
-                    else if(response.data.success === 2){
+                    else if (response.data.success === 2) {
+                        toastr.error('El Usuario Principal no puede ser Desactivado');
+                    }
+                    else if(response.data.success === 3){
                         toastr.success('Actualizado');
                         $('#modalEditar').modal('hide');
                         recargar();
                     }
                     else {
-                        toastMensaje('error', 'Error al actualizar');
+                        toastr.error('Error al actualizar');
                     }
                 })
                 .catch((error) => {
                     closeLoading()
-                    toastMensaje('error', 'Error al actualizar');
+                    toastr.error('Error al actualizar');
                 });
         }
 

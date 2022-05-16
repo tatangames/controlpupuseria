@@ -14,7 +14,7 @@ use App\Http\Controllers\Backend\Admin\Servicios\CategoriasController;
 use App\Http\Controllers\Backend\Admin\Clientes\ClientesController;
 use App\Http\Controllers\Backend\Admin\Eventos\EventosController;
 use App\Http\Controllers\Backend\Admin\Horario\HorarioController;
-
+use App\Http\Controllers\Backend\Admin\Ordenes\OrdenesController;
 
 // INICIO
 Route::get('/', [LoginController::class,'index'])->name('login');
@@ -49,7 +49,6 @@ Route::post('/admin/permisos/extra-borrar', [PermisosController::class, 'borrarP
 Route::get('/admin/editar-perfil/index', [PerfilController::class,'indexEditarPerfil'])->name('admin.perfil');
 Route::post('/admin/editar-perfil/actualizar', [PerfilController::class, 'editarUsuario']);
 
-
 // --- ESTADISTICAS ---
 Route::get('/admin/estadisticas/index', [EstadisticasController::class,'index'])->name('index.estadisticas');
 
@@ -60,7 +59,6 @@ Route::post('/zona/nueva-zona', [ZonaController::class,'nuevaZona']);
 Route::post('/zona/informacion-zona', [ZonaController::class,'informacionZona']);
 Route::post('/zona/editar-zona', [ZonaController::class,'editarZona']);
 Route::get('admin/zona/ver-mapa/{id}', [ZonaController::class,'verMapa']);
-
 
 // --- POLIGONO ---
 Route::get('/admin/zona/poligono/{id}', [ZonaController::class,'indexPoligono']);
@@ -80,6 +78,23 @@ Route::get('/admin/motoristas/tabla/lista', [MotoristaController::class,'tablaMo
 Route::post('/admin/motoristas/nuevo', [MotoristaController::class,'nuevo']);
 Route::post('/admin/motoristas/informacion', [MotoristaController::class,'informacion']);
 Route::post('/admin/motoristas/editar', [MotoristaController::class,'editar']);
+
+// --- MOTORISTAS ORDENES ---
+Route::get('/admin/motoristas-ordenes/lista', [MotoristaController::class,'indexMotoristaOrdenes'])->name('index.motoristas.ordenes');
+Route::get('/admin/motoristas-ordenes/tabla/lista', [MotoristaController::class,'tablaMotoristasOrdenes']);
+Route::post('/admin/motoristas-ordenes/informacion', [MotoristaController::class,'informacionMotoristaOrden']);
+Route::post('/admin/motoristas-ordenes/editar', [MotoristaController::class,'editarMotoristaOrden']);
+
+// --- ORDENES ---
+Route::get('/admin/ordenes/lista', [OrdenesController::class,'index'])->name('index.ordenes');
+Route::get('/admin/ordenes/tabla/lista', [OrdenesController::class,'tablaOrdenes']);
+Route::post('/admin/ordenes/informacion', [OrdenesController::class,'informacionOrden']);
+
+Route::get('/admin/productos/ordenes/{id}', [OrdenesController::class,'indexProductosOrdenes']);
+Route::get('/admin/productos/ordenes/tabla/{id}', [OrdenesController::class,'tablaOrdenesProducto']);
+
+Route::get('/admin/ordenes-hoy/lista', [OrdenesController::class,'indexOrdenHoy'])->name('index.ordenes.hoy');
+Route::get('/admin/ordenes-hoy/tabla/lista', [OrdenesController::class,'tablaOrdenesHoy']);
 
 // --- BLOQUES ---
 Route::get('/admin/bloques', [CategoriasController::class,'indexBloque'])->name('index.bloques');
@@ -127,9 +142,7 @@ Route::post('/admin/productos/informacion', [CategoriasController::class,'inform
 Route::post('/admin/productos/editar', [CategoriasController::class,'editarProductos']);
 Route::post('/admin/productos/ordenar', [CategoriasController::class,'ordenarProductos']);
 
-
 // --- CLIENTES ---
-// lista de cliente registrados hoy
 Route::get('/admin/cliente/lista-clientes-hoy', [ClientesController::class, 'indexRegistradosHoy'])->name('index.clientes.registrados.hoy');
 Route::get('/admin/cliente/tablas/cliente-hoy', [ClientesController::class, 'tablaRegistradosHoy']);
 
@@ -138,10 +151,8 @@ Route::get('/admin/cliente/tabla/listado', [ClientesController::class, 'tablaind
 Route::post('/admin/cliente/informacion', [ClientesController::class, 'informacionCliente']);
 Route::post('/admin/cliente/actualizar/informacion', [ClientesController::class, 'actualizarCliente']);
 
-
 Route::get('/admin/cliente/lista/direcciones/{id}', [ClientesController::class, 'indexListaDirecciones']);
 Route::get('/admin/cliente/lista/tabla-direcciones/{id}', [ClientesController::class, 'tablaIndexListaDirecciones']);
-
 
 // --- CONFIGURACION ---
 Route::get('/admin/configuracion/index', [HorarioController::class, 'indexConfiguracion'])->name('index.configuracion');

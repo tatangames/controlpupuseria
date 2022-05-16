@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Backend\Admin\Motorista;
 
 use App\Http\Controllers\Controller;
 use App\Models\Motoristas;
+use App\Models\MotoristasOrdenes;
+use App\Models\Ordenes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -102,4 +104,91 @@ class MotoristaController extends Controller
             return ['success' => 3];
         }
     }
+
+
+    // ***** MOTORISTAS ORDENES *****
+
+    public function indexMotoristaOrdenes(){
+        return view('backend.admin.motoristas.ordenes.vistamotoristaordenes');
+    }
+
+    public function tablaMotoristasOrdenes(){
+
+        $motoristas = MotoristasOrdenes::orderBy('fecha_agarrada')->get();
+
+        foreach ($motoristas as $mm){
+
+            $infoMotorista = Motoristas::where('id', $mm->motoristas_id)->first();
+            $infoOrdenes = Ordenes::where('id', $mm->ordenes_id)->first();
+
+            $mm->nombre = $infoMotorista->nombre;
+            $mm->usuario = $infoMotorista->usuario;
+
+            $mm->fecha_agarrada = date("h:i A d-m-Y", strtotime($mm->fecha_agarrada));
+            $mm->fecha_orden = date("h:i A d-m-Y", strtotime($infoOrdenes->fecha_orden));
+            $mm->orden = $infoOrdenes->id;
+
+            if($infoOrdenes->estado_5 == 1){
+                $mm->estado = "Orden Entregada";
+            }else if($infoOrdenes->estado_7 == 1){
+
+                if($infoOrdenes->cancelado == 1){
+                    $mm->estado = "Orden Cancelada por: Cliente";
+                }else{
+                    $mm->estado = "Orden Cancelada por: Propietario";
+                }
+
+            }else{
+                $mm->estado = "";
+            }
+        }
+
+        return view('backend.admin.motoristas.ordenes.tablavistamotoristaordenes', compact('motoristas'));
+    }
+
+    public function informacionMotoristaOrden(Request $request){
+
+        $regla = array(
+            'id' => 'required',
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){ return ['success' => 0];}
+
+        if($info = MotoristasOrdenes::where('id', $request->id)->first()){
+
+            $motoristas = Motoristas::where('activo', 1)->orderBy('nombre')->get();
+
+            return ['success' => 1, 'idmoto' => $info->motoristas_id, 'motoristas' => $motoristas];
+        }else{
+            return ['success' => 2];
+        }
+    }
+
+    public function editarMotoristaOrden(Request $request){
+        $rules = array(
+            'id' => 'required'
+        );
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()){ return ['success' => 0];}
+
+        if(MotoristasOrdenes::where('id', $request->id)->first()){
+
+            MotoristasOrdenes::where('id', $request->id)->update([
+                'motoristas_id' => $request->idmoto,
+            ]);
+
+            return ['success' => 1];
+        }else{
+            return ['success' => 2];
+        }
+
+    }
+
+
+
+
 }

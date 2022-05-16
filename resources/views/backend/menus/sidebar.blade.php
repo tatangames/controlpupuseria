@@ -9,7 +9,7 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
-
+                <!--
                 <li class="nav-item">
 
                     <a href="#" class="nav-link">
@@ -22,21 +22,15 @@
 
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('admin.roles.index') }}" target="frameprincipal" class="nav-link">
+                            <a href="#" target="frameprincipal" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Roles</p>
                             </a>
                         </li>
-
-                        <li class="nav-item">
-                            <a href="{{ route('admin.permisos.index') }}" target="frameprincipal" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Permisos</p>
-                            </a>
-                        </li>
-
                     </ul>
                 </li>
+                -->
+
 
                 <li class="nav-item">
                     <a href="{{ route('index.estadisticas') }}" target="frameprincipal" class="nav-link">
@@ -45,12 +39,46 @@
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-list-alt"></i>
+                        <p>
+                            Ordenes
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+
+                        <li class="nav-item">
+                            <a href="{{ route('index.ordenes.hoy') }}" target="frameprincipal" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Ordenes Hoy</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('index.ordenes') }}" target="frameprincipal" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Listado de Ordenes</p>
+                            </a>
+                        </li>
+
+
+                        <li class="nav-item">
+                            <a href="{{ route('index.motoristas.ordenes') }}" target="frameprincipal" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Motoristas Ordenes</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
 
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="far fa-edit"></i>
                         <p>
-                            Mapa
+                            Configuración
                             <i class="fas fa-angle-left right"></i>
                         </p>
                     </a>
@@ -76,7 +104,7 @@
                         <li class="nav-item">
                             <a href="{{ route('index.configuracion') }}" target="frameprincipal" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Configuración</p>
+                                <p>Información</p>
                             </a>
                         </li>
                     </ul>
@@ -106,6 +134,7 @@
                                 <p>Lista de Motoristas</p>
                             </a>
                         </li>
+
                     </ul>
                 </li>
 
@@ -124,11 +153,8 @@
                                 <p>Servicios</p>
                             </a>
                         </li>
-
                     </ul>
-
                 </li>
-
 
                 <li class="nav-item">
                     <a href="#" class="nav-link">
@@ -152,14 +178,15 @@
                                 <p>Listado de Clientes</p>
                             </a>
                         </li>
-
-
-
                     </ul>
-
                 </li>
 
-
+                <li class="nav-item">
+                    <a href="{{ route('admin.permisos.index') }}" target="frameprincipal" class="nav-link">
+                        <i class="far fa-user nav-icon"></i>
+                        <p>Administradores</p>
+                    </a>
+                </li>
 
 
                 <!-- fin del acordeon -->
