@@ -3,8 +3,13 @@
 namespace App\Http\Controllers\Backend\Api\Afiliados;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendNotiClienteJobs;
+use App\Jobs\SendNotiMotoristaJobs;
 use App\Models\Afiliados;
 use App\Models\Categorias;
+use App\Models\Clientes;
+use App\Models\Motoristas;
+use App\Models\MotoristasOrdenes;
 use App\Models\Ordenes;
 use App\Models\OrdenesDescripcion;
 use App\Models\OrdenesDirecciones;
@@ -368,6 +373,17 @@ class ApiCategoriaAfiliadoController extends Controller
                     Ordenes::where('id', $request->ordenid)->update(['estado_7' => 1, 'visible_p' => 0,
                         'cancelado' => 2, 'fecha_7' => $fecha, 'mensaje_7' => $request->mensaje]);
 
+                    // notificacion a cliente que su orden fue cancelada
+                    $infoCliente = Clientes::where('id', $o->clientes_id)->first();
+
+                    if($infoCliente->token_fcm != null){
+
+                        $titulo = "Orden #" . $request->ordenid . " Cancelada";
+                        $mensaje = "Revise su Orden";
+
+                        SendNotiClienteJobs::dispatch($titulo, $mensaje, $infoCliente->token_fcm);
+                    }
+
                     DB::commit();
 
                     return ['success' => 1];
@@ -429,6 +445,17 @@ class ApiCategoriaAfiliadoController extends Controller
 
                 Ordenes::where('id', $request->ordenid)->update(['estado_2' => 1,
                     'fecha_2' => $fecha, 'visible_p' => 0, 'visible_p2' => 1, 'visible_p3' => 1]);
+
+                // notificacion a cliente
+                $infoCliente = Clientes::where('id', $or->clientes_id)->first();
+
+                if($infoCliente->token_fcm != null){
+
+                    $titulo = "Orden #" . $request->ordenid . " Aceptada";
+                    $mensaje = "Su orden inicia su Preparación";
+
+                    SendNotiClienteJobs::dispatch($titulo, $mensaje, $infoCliente->token_fcm);
+                }
 
                 // orden iniciada
                 return ['success' => 2];
@@ -520,6 +547,20 @@ class ApiCategoriaAfiliadoController extends Controller
             if($o->estado_3 == 0){
                 Ordenes::where('id', $request->ordenid)->update(['visible_p2' => 0, 'visible_p3' => 0,
                     'estado_3' => 1, 'fecha_3' => $fechahoy]);
+            }
+
+            // notificacion a motorista si agarro la orden
+            if($mo = MotoristasOrdenes::where('ordenes_id', $request->ordenid)->first()){
+
+                $info = Motoristas::where('id', $mo->motoristas_id)->first();
+
+                if($info->token_fcm != null){
+
+                    $titulo = "Orden #" . $request->ordenid;
+                    $mensaje = "Esta lista para su Entrega";
+
+                    SendNotiMotoristaJobs::dispatch($titulo, $mensaje, $info->token_fcm);
+                }
             }
 
             return ['success' => 1];

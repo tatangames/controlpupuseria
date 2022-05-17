@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Backend\Api\Motoristas;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendNotiClienteJobs;
+use App\Models\Clientes;
 use App\Models\Motoristas;
 use App\Models\MotoristasOrdenes;
 use App\Models\Ordenes;
@@ -307,6 +309,17 @@ class ApiMotoristasController extends Controller
                 Ordenes::where('id', $request->ordenid)->update(['estado_4' => 1,
                     'fecha_4' => $fecha]);
 
+                // notificacion al cliente que la orden va en camino;
+                $infoCliente = Clientes::where('id', $or->clientes_id)->first();
+
+                if($infoCliente->token_fcm != null){
+
+                    $titulo = "Orden #" . $request->ordenid . " En Camino";
+                    $mensaje = "El Motorista se Dirige a su Dirección";
+
+                    SendNotiClienteJobs::dispatch($titulo, $mensaje, $infoCliente->token_fcm);
+                }
+
                 return ['success' => 2]; //orden va en camino
             }else{
                 return ['success' => 3]; // la orden aun no ha sido preparada
@@ -451,6 +464,16 @@ class ApiMotoristasController extends Controller
 
             Ordenes::where('id', $request->ordenid)->update(['estado_5' => 1,
                 'fecha_5' => $fecha, 'visible_m' => 0]);
+
+            $infoCliente = Clientes::where('id', $or->clientes_id)->first();
+
+            if($infoCliente->token_fcm != null){
+
+                $titulo = "Orden #" . $request->ordenid . " Entrega";
+                $mensaje = "Muchas Gracias.";
+
+                SendNotiClienteJobs::dispatch($titulo, $mensaje, $infoCliente->token_fcm);
+            }
 
             return ['success' => 2]; // orden completada
         }else{

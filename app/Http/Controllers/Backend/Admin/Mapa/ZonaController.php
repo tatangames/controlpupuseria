@@ -167,20 +167,4 @@ class ZonaController extends Controller
         return view('backend.admin.zonas.mapa.index', compact('poligono'));
     }
 
-    public function actualizarGlobalmente(Request $request){
-
-        $rules = array(
-            'toggle' => 'required',
-        );
-
-        $validator = Validator::make($request->all(), $rules);
-
-        if($validator->fails()){ return ['success' => 0]; }
-
-        Zonas::where('id', '!=' , 0)->update([
-            'mensaje_bloqueo' => $request->mensaje,
-            'saturacion' => $request->toggle]);
-
-        return ['success'=> 1];
-    }
 }

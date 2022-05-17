@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Backend\Api\Carrito;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendNotiPropietarioJobs;
+use App\Models\Afiliados;
 use App\Models\CarritoExtra;
 use App\Models\CarritoTemporal;
 use App\Models\Clientes;
@@ -528,6 +530,24 @@ class ApiCarritoController extends Controller
                 // BORRAR CARRITO TEMPORAL DEL USUARIO
                 //CarritoExtra::where('carrito_temporal_id', $cart->id)->delete();
                 //CarritoTemporal::where('clientes_id', $request->clienteid)->delete();
+
+                // obtener id one signal de todos los propietarios que reciban notificaciones
+                $listaPropietarios = Afiliados::where('activo', 1)
+                    ->where('disponible', 1)->get();
+
+                $pilaPropietarios = array();
+                foreach($listaPropietarios as $p){
+                    if($p->token_fcm != null){
+                        array_push($pilaPropietarios, $p->token_fcm);
+                    }
+                }
+
+                $titulo = "Nueva Orden #" . $nuevaDir->id;
+                $mensaje = "Hay una Nueva Orden";
+
+                if($pilaPropietarios != null) {
+                    SendNotiPropietarioJobs::dispatch($titulo, $mensaje, $pilaPropietarios);
+                }
 
                 DB::commit();
                 return ['success' => 6];

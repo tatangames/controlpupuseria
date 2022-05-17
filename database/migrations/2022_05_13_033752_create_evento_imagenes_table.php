@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateEventoImagenesTable extends Migration
 {
     /**
-     * Run the migrations.
+     * imagenes para eventos
      *
      * @return void
      */

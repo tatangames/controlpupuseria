@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend\Admin\Perfil;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendNotiClienteJobs;
 use App\Models\Usuarios;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -36,4 +37,6 @@ class PerfilController extends Controller
 
         return ['success' => 1];
     }
+
+
 }

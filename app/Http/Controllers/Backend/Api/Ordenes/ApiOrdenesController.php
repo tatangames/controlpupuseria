@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Backend\Api\Ordenes;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendNotiPropietarioJobs;
+use App\Models\Afiliados;
 use App\Models\Clientes;
 use App\Models\MotoristasExperiencia;
 use App\Models\MotoristasOrdenes;
@@ -124,6 +126,25 @@ class ApiOrdenesController extends Controller
                         'cancelado' => 1,
                         'visible' => 0,
                         'fecha_7' => $fecha]);
+
+                    // notificacion a propietario por orden cancelada por el cliente
+                    $listaPropietarios = Afiliados::where('activo', 1)
+                        ->where('disponible', 1)
+                        ->get();
+
+                    $pilaPropietarios = array();
+                    foreach($listaPropietarios as $p){
+                        if($p->token_fcm != null){
+                            array_push($pilaPropietarios, $p->token_fcm);
+                        }
+                    }
+
+                    $titulo = "Orden #" . $request->ordenid;
+                    $mensaje = "Fue Cancelada por el Cliente";
+
+                    if($pilaPropietarios != null) {
+                        SendNotiPropietarioJobs::dispatch($titulo, $mensaje, $pilaPropietarios);
+                    }
 
                     DB::commit();
                     return ['success' => 2];

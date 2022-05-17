@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateMotoristasExperienciaTable extends Migration
 {
     /**
-     * Run the migrations.
+     * calificacion entrega
      *
      * @return void
      */

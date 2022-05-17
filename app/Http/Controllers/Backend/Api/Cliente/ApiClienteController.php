@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend\Api\Cliente;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendEmailJobs;
 use App\Models\Clientes;
 use App\Models\InformacionAdmin;
 use App\Models\IntentosCorreo;
@@ -85,11 +86,10 @@ class ApiClienteController extends Controller
             $dato->fecha = $fecha;
             $dato->save();
 
-            // enviar correo
+            // envio de correo
+            SendEmailJobs::dispatch($codigo, $request->correo);
 
-
-            $datos = InformacionAdmin::where('id', 1)->first();
-            return ['success' => 1, 'mensaje' => $datos->mensaje];
+            return ['success' => 1];
         }else{
             return ['success' => 2];
         }
@@ -108,7 +108,7 @@ class ApiClienteController extends Controller
             return ['success' => 0];
         }
 
-        // verificar codigo, donde coincida codigo de area + numero
+        // verificar codigo
         if ($info = Clientes::where('correo', $request->correo)
             ->where('codigo_correo', $request->codigo)
             ->first()) {
