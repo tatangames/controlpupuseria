@@ -89,7 +89,7 @@
     <!-- AGREGAR LLAVE API MAPS -->
 
     <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBJ-xrNOnVXal9aMYxN3SejreyMifAbzaw&callback=initMap">
+            src="https://maps.googleapis.com/maps/api/js?key={{ $googleapi }}&callback=initMap">
     </script>
 
 

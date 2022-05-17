@@ -163,8 +163,11 @@ class ZonaController extends Controller
     }
 
     public function verMapa($id){
+
+        $googleapi = config('googleapi.Google_API');
+
         $poligono = ZonaPoligono::where('zonas_id', $id)->get();
-        return view('backend.admin.zonas.mapa.index', compact('poligono'));
+        return view('backend.admin.zonas.mapa.index', compact('poligono', 'googleapi'));
     }
 
 }
