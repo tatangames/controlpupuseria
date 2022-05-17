@@ -20,13 +20,19 @@ class RolesSeeder extends Seeder
 
 
         // roles y permisos
-        Permission::create(['name' => 'grupo.superadmin.roles-y-permisos', 'description' => 'Contenedor para el grupo llamado: Roles y Permisos'])->syncRoles($role1);
+        Permission::create(['name' => 'seccion.permisos', 'description' => 'Vista para permisos'])->syncRoles($role1);
 
+        // vista configuracion
+        Permission::create(['name' => 'seccion.configuracion', 'description' => 'Vista configuracion'])->syncRoles($role1);
 
-        // Vista de Ingreso (2 roles)
-        Permission::create(['name' => 'rol.superadmin.inicio', 'description' => 'Cuando inicia el sistema, se redirigirá la vista al grupo Inicio'])->syncRoles($role1, $role2);
+        // vista personal
+        Permission::create(['name' => 'seccion.personal', 'description' => 'Vista personal'])->syncRoles($role1);
 
+        // vista servicios
+        Permission::create(['name' => 'seccion.servicios', 'description' => 'vista servicios'])->syncRoles($role1);
 
+        // vista administradores
+        Permission::create(['name' => 'seccion.administradores', 'description' => 'vista administradores'])->syncRoles($role1);
 
 
     }

@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 
-// Cliente
 use App\Http\Controllers\Backend\Api\Cliente\ApiClienteController;
 use App\Http\Controllers\Backend\Api\Cliente\ApiRegistroController;
 use App\Http\Controllers\Backend\Api\Servicios\ApiServiciosController;

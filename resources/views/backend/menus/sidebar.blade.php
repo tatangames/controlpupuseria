@@ -73,7 +73,7 @@
                     </ul>
                 </li>
 
-
+                @can('seccion.configuracion')
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="far fa-edit"></i>
@@ -109,7 +109,9 @@
                         </li>
                     </ul>
                 </li>
+                @endcan
 
+                @can('seccion.personal')
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="far fa-edit"></i>
@@ -137,7 +139,9 @@
 
                     </ul>
                 </li>
+                @endcan
 
+                @can('seccion.servicios')
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="far fa-edit"></i>
@@ -155,6 +159,7 @@
                         </li>
                     </ul>
                 </li>
+                @endcan
 
                 <li class="nav-item">
                     <a href="#" class="nav-link">
@@ -181,13 +186,14 @@
                     </ul>
                 </li>
 
+                @can('seccion.administradores')
                 <li class="nav-item">
                     <a href="{{ route('admin.permisos.index') }}" target="frameprincipal" class="nav-link">
                         <i class="far fa-user nav-icon"></i>
                         <p>Administradores</p>
                     </a>
                 </li>
-
+                @endcan
 
                 <!-- fin del acordeon -->
             </ul>
