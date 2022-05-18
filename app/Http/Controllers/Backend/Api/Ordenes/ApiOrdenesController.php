@@ -224,6 +224,28 @@ class ApiOrdenesController extends Controller
         }
     }
 
+    public function borrarOrdenCliente(Request $request){
+
+        // validaciones para los datos
+        $reglaDatos = array(
+            'ordenid' => 'required'
+        );
+
+        $validarDatos = Validator::make($request->all(), $reglaDatos);
+
+        if($validarDatos->fails()){return ['success' => 0]; }
+
+        // oculta la orden al cliente
+        if(Ordenes::where('id', $request->ordenid)->first()){
+
+            Ordenes::where('id', $request->ordenid)->update(['visible' => 0]);
+
+            return ['success' => 1];
+        }else{
+            return ['success' => 2]; // no encontrada
+        }
+    }
+
     public function verHistorial(Request $request){
         $reglaDatos = array(
             'id' => 'required',
@@ -257,7 +279,7 @@ class ApiOrdenesController extends Controller
                     if($o->cancelado == 2){
                         // propietario
                         if($o->mensaje_7 != null){
-                            $o->estado = "Orden Cancelada: " + $o->mensaje7;
+                            $o->estado = "Orden Cancelada: " . $o->mensaje_7;
                         }else{
                             $o->estado = "Orden Cancelada";
                         }
@@ -273,8 +295,6 @@ class ApiOrdenesController extends Controller
                 $infoCliente = OrdenesDirecciones::where('ordenes_id', $o->id)->first();
                 $o->direccion = $infoCliente->direccion;
             }
-
-
 
             return ['success' => 1, 'historial' => $orden];
 

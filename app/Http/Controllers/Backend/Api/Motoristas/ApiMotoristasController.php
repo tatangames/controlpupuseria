@@ -469,7 +469,7 @@ class ApiMotoristasController extends Controller
 
             if($infoCliente->token_fcm != null){
 
-                $titulo = "Orden #" . $request->ordenid . " Entrega";
+                $titulo = "Orden #" . $request->ordenid . " Entregada";
                 $mensaje = "Muchas Gracias.";
 
                 SendNotiClienteJobs::dispatch($titulo, $mensaje, $infoCliente->token_fcm);

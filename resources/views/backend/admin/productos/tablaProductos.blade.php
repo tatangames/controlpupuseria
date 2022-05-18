@@ -10,7 +10,6 @@
                             <th>Posición</th>
                             <th>Nombre</th>
                             <th>Activo</th>
-                            <th>Visible</th>
                             <th>Precio</th>
                             <th>Imagen</th>
                             <th>Opciones</th>
@@ -25,14 +24,6 @@
 
                                 <td>
                                     @if($dato->activo == 0)
-                                        <span class="badge bg-danger">Desactivado</span>
-                                    @else
-                                        <span class="badge bg-success">Activado</span>
-                                    @endif
-                                </td>
-
-                                <td>
-                                    @if($dato->visible == 0)
                                         <span class="badge bg-danger">Desactivado</span>
                                     @else
                                         <span class="badge bg-success">Activado</span>

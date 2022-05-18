@@ -80,7 +80,7 @@
                                 <div class="form-group">
                                     <div>
                                         <label>Imagen</label>
-                                        <p>Tamaño recomendado de: 600 x -</p>
+                                        <p>Tamaño recomendado de: 600 x 400 px</p>
                                     </div>
                                     <br>
                                     <div class="col-md-10">
@@ -130,7 +130,7 @@
                             <div class="form-group">
                                 <div>
                                     <label>Imagen</label>
-                                    <p>Tamaño recomendado de: 600 x -</p>
+                                    <p>Tamaño recomendado de: 600 x 400 px</p>
                                 </div>
                                 <br>
                                 <div class="col-md-10">

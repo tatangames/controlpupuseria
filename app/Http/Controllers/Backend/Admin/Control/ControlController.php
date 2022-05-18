@@ -19,37 +19,19 @@ class ControlController extends Controller
         // $permiso = $user->getAllPermissions()->pluck('name');
 
         // Rol: Super-Admin
-       /* if($user->hasPermissionTo('rol.superadmin.inicio')){
-            // $ruta = 'admin.roles.index';
+        if($user->hasPermissionTo('seccion.estadisticas')){
             $ruta = 'index.estadisticas';
         }
 
-        // Rol: Admin-Informativo
-        // vista informatico -> redirigir a nuevas solicitudes
-        else  if($user->hasPermissionTo('rol.informativo.nuevas-solicitudes')){
-            $ruta = 'admin2.nuevas.solicitudes.index';
-        }
-
-        // Rol: Admin-Electrico
-        // vista informatico -> redirigir a nuevas solicitudes
-        //*** Por cada departamento de denuncia (electrico, agua, baches, etc)
-        // se debera crear su propia vista
-        // aqui se revisan denuncias tipo Electricas
-        else  if($user->hasPermissionTo('rol.denuncia.nuevas-solicitudes')){
-            $ruta = 'admin2.nuevas.solicitudes.denuncias.index';
-        }
-
-        // Rol: Admin-Partidas
-        // vista partida -> redirigir a nuevas solicitudes
-        // aqui se revisan solicitude para partida de nacimiento
-        else  if($user->hasPermissionTo('rol.partida.nuevas-solicitudes')){
-            $ruta = 'admin2.nuevas.solicitudes.partida.index';
+        // Rol: Revisador
+        else  if($user->hasPermissionTo('seccion.estadisticas')){
+            $ruta = 'index.estadisticas';
         }
 
         else{
             // no tiene ningun permiso de vista, redirigir a pantalla sin permisos
             $ruta = 'no.permisos.index';
-        }*/
+        }
 
         $ruta = 'admin.roles.index';
 

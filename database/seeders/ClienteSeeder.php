@@ -16,16 +16,16 @@ class ClienteSeeder extends Seeder
     public function run()
     {
         Usuarios::create([
-            'nombre' => 'Jonathan Moran',
-            'usuario' => 'tatan',
-            'password' => bcrypt('admin'),
+            'nombre' => 'Administrador',
+            'usuario' => 'admin',
+            'password' => bcrypt('1234'),
             'activo' => '1'
         ])->assignRole('Super-Admin');
 
         Usuarios::create([
-            'nombre' => 'Juan Perez',
-            'usuario' => 'juan',
-            'password' => bcrypt('admin'),
+            'nombre' => 'Revisador',
+            'usuario' => 'revisador',
+            'password' => bcrypt('1234'),
             'activo' => '1'
         ])->assignRole('Revisador');
 

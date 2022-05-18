@@ -14,7 +14,6 @@ class ApiRegistroController extends Controller
     public function registroCliente(Request $request){
 
         $rules = array(
-            'nombre' => 'required',
             'usuario' => 'required',
             'password' => 'required',
         );
@@ -38,14 +37,13 @@ class ApiRegistroController extends Controller
         $fecha = Carbon::now('America/El_Salvador');
 
         $usuario = new Clientes();
-        $usuario->nombre = $request->nombre;
         $usuario->usuario = $request->usuario;
         $usuario->correo = $request->correo;
         $usuario->codigo_correo = null;
         $usuario->password = Hash::make($request->password);
         $usuario->fecha = $fecha;
         $usuario->activo = 1;
-        $usuario->imagen = null;
+        $usuario->token_fcm = $request->token_fcm;
 
         if($usuario->save()){
 

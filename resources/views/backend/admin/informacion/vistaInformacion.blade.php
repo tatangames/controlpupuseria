@@ -32,7 +32,7 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-header" id="card-header-color">
-                <h3 class="card-title" style="color: white">Lista de Horarios</h3>
+                <h3 class="card-title" style="color: white">Configuración</h3>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -51,7 +51,7 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Editar Zona</h4>
+                <h4 class="modal-title">Editar Opciones</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -77,6 +77,18 @@
                                     <label>Mensaje de Cerrado</label>
                                     <input type="text" maxlength="300" class="form-control" id="mensaje">
                                     <input type="hidden" id="id-editar">
+                                </div>
+
+
+                                <div class="form-group" style="margin-left:0px">
+                                    <label>Notificación cada minuto si una orden no ha sido respondida</label><br>
+                                    <label class="switch" style="margin-top:10px">
+                                        <input type="checkbox" id="toggle-noti">
+                                        <div class="slider round">
+                                            <span class="on">Activar</span>
+                                            <span class="off">Desactivar</span>
+                                        </div>
+                                    </label>
                                 </div>
 
                             </div>
@@ -142,6 +154,12 @@
                             $("#toggle-cerrado").prop("checked", true);
                         }
 
+                        if(response.data.info.activo_noti === 0){
+                            $("#toggle-noti").prop("checked", false);
+                        }else{
+                            $("#toggle-noti").prop("checked", true);
+                        }
+
                     }else{
                         toastr.error('Error al Buscar');
                     }
@@ -156,8 +174,10 @@
             var id = document.getElementById('id-editar').value;
             var mensaje = document.getElementById('mensaje').value;
             var tp = document.getElementById('toggle-cerrado').checked;
+            var tn = document.getElementById('toggle-noti').checked;
 
             var toggleCerrado = tp ? 1 : 0;
+            var toggleNoti = tn ? 1 : 0;
 
             if(mensaje === ''){
                 toastr.error('Mensaje de Cerrado es Requerido');
@@ -175,6 +195,7 @@
             formData.append('id', id);
             formData.append('mensaje', mensaje);
             formData.append('cbcerrado', toggleCerrado);
+            formData.append('cbnoti', toggleNoti);
 
             axios.post('/admin/configuracion/editar', formData, {
             })

@@ -7,7 +7,7 @@
 </aside>
 
 <footer class="main-footer">
-    <strong>Sistema Delivery v1.0.0</strong>
+    <strong>Sistema El Tuncazo</strong>
 </footer>
 </div>
 

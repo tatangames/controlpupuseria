@@ -19,6 +19,8 @@ class RolesSeeder extends Seeder
         $role2 = Role::create(['name' => 'Revisador']);
 
 
+        Permission::create(['name' => 'seccion.estadisticas', 'description' => 'Vista para estadisticas de la App'])->syncRoles($role1, $role2);
+
         // roles y permisos
         Permission::create(['name' => 'seccion.permisos', 'description' => 'Vista para permisos'])->syncRoles($role1);
 

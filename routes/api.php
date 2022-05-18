@@ -55,6 +55,10 @@ Route::post('cliente/ver/estado-orden',  [ApiOrdenesController::class, 'estadoOr
 Route::post('cliente/proceso/orden/cancelar',  [ApiOrdenesController::class, 'cancelarOrdenCliente']);
 Route::post('cliente/listado/productos/ordenes',  [ApiOrdenesController::class, 'listadoProductosOrdenes']);
 Route::post('cliente/listado/productos/ordenes-individual',  [ApiOrdenesController::class, 'listadoProductosOrdenesIndividual']);
+Route::post('cliente/proceso/borrar/orden',  [ApiOrdenesController::class, 'borrarOrdenCliente']);
+
+
+
 
 // --- EVENTOS ----
 Route::get('cliente/eventos/listado', [ApiServiciosController::class, 'listadoEventos']);

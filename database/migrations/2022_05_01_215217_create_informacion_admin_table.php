@@ -19,6 +19,9 @@ class CreateInformacionAdminTable extends Migration
             // cerrado por evento
             $table->boolean('cerrado');
             $table->string('mensaje_cerrado', 300);
+
+            // para el CRON que envia notificacion a cada propietario si hay ordenes sin contestas
+            $table->boolean('activo_noti');
         });
     }
 

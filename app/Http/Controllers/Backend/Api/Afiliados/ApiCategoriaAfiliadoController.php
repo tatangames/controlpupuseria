@@ -332,7 +332,7 @@ class ApiCategoriaAfiliadoController extends Controller
 
             $producto = DB::table('ordenes_descripcion AS o')
                 ->join('producto AS p', 'p.id', '=', 'o.producto_id')
-                ->select('p.imagen', 'p.nombre', 'p.descripcion', 'p.utiliza_imagen', 'o.precio', 'o.cantidad', 'o.nota')
+                ->select('p.imagen', 'p.nombre', 'p.descripcion', 'p.nota AS notaproducto', 'p.utiliza_imagen', 'o.precio', 'o.cantidad', 'o.nota')
                 ->where('o.id', $request->ordenesid)
                 ->get();
 
@@ -639,13 +639,19 @@ class ApiCategoriaAfiliadoController extends Controller
 
                 $o->fecha_orden = date("d-m-Y h:i A", strtotime($o->fecha_orden));
 
-                if($o->estado_4 == 1){
-                    $o->estado = "Orden En Entrega";
+                if($o->estado_2 == 1){
+                    $o->estado = "Orden Preparandose";
+                }
+                if($o->estado_3 == 1){
+                    $o->estado = "Orden lista para Entrega";
+                }
+                else if($o->estado_4 == 1){
+                    $o->estado = "Orden En Camino";
                 }
                 else if($o->estado_ == 5){
                     $o->estado = "Orden Entregada";
                 }
-                else if($o->estado_ == 7){
+                else if($o->estado_7 == 1){
                     if($o->cancelado == 1){
                         $o->estado = "Orden Cancelada Por: Cliente";
                     }else{
