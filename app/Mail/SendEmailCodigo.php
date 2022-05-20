@@ -32,9 +32,9 @@ class SendEmailCodigo extends Mailable
      */
     public function build()
     {
-        return $this->from('eltuncazo@gmail.com', 'EL TUNCAZO')
+        return $this->from('eltuncazometapan@gmail.com', 'EL TUNCAZO')
             ->subject($this->sujeto)
-            ->view('backend.correos.vistacorreocodigo')
+            ->view('backend.correos.vistaCorreoCodigo')
             ->with([
                 'codigo' => $this->codigo
             ]);
