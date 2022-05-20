@@ -16,17 +16,18 @@ class SendEmailCodigo extends Mailable
     public $codigo;
 
     /**
-     * Create a new message instance.
+     * Constructor
      *
      * @return void
      */
     public function __construct($codigo)
     {
+
         $this->codigo = $codigo;
     }
 
     /**
-     * Build the message.
+     * compilador
      *
      * @return $this
      */
@@ -34,7 +35,7 @@ class SendEmailCodigo extends Mailable
     {
         return $this->from('eltuncazometapan@gmail.com', 'EL TUNCAZO')
             ->subject($this->sujeto)
-            ->view('backend.correos.vistaCorreoCodigo')
+            ->view('backend.correos.vistacorreocodigo')
             ->with([
                 'codigo' => $this->codigo
             ]);
