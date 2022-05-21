@@ -10,7 +10,7 @@
                                 <th>Fecha de Registro</th>
                                 <th>Usuario</th>
                                 <th>Activo</th>
-                                <th>Imagen</th>
+                                <th>Correo</th>
                                 <th>Opciones</th>
                             </tr>
                             </thead>
@@ -28,13 +28,7 @@
                                         @endif
                                     </td>
 
-                                    <td>
-                                        @if($dato->imagen != null)
-                                            <center><img alt="Servicios" src="{{ url('storage/imagenes/'.$dato->imagen) }}" width="100px" height="100px" /></center>
-                                        @else
-
-                                        @endif
-                                    </td>
+                                    <td>{{ $dato->correo }}</td>
 
                                     <td>
                                         <button type="button" class="btn btn-info btn-xs" onclick="informacion({{ $dato->id }})">
