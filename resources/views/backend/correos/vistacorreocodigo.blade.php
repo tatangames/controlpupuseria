@@ -83,7 +83,7 @@
                                 <p style="margin: 0;">Cafe, Helados Y Pupuseria El Tuncazo</p>
                             </div>
                             <div style="margin-top: 15px">
-                                <img src="{{url('/images/logo.png')}}" alt="imagen" height="125px" width="125px">
+                                <img src="http://tuncazo.xyz/storage/imagenes/logo.png" height="125px" width="125px">
                             </div>
                         </div>
                     </td>
