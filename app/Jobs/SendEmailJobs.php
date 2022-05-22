@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class SendEmailJobs implements ShouldQueue
@@ -35,7 +36,8 @@ class SendEmailJobs implements ShouldQueue
      */
     public function handle()
     {
-        $email = new SendEmailCodigo($this->codigo);
-        Mail::to($this->emailuser)->send($email);
+        Log::info('llega aqui');
+        //$email = new SendEmailCodigo($this->codigo);
+        //Mail::to($this->emailuser)->send($email);
     }
 }
