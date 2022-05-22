@@ -18,15 +18,17 @@ class SendEmailJobs implements ShouldQueue
 
     protected $codigo;
     protected $emailuser;
+    protected $from;
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($codigo, $emailuser)
+    public function __construct($codigo, $emailuser, $from)
     {
         $this->codigo = $codigo;
         $this->emailuser = $emailuser;
+        $this->from = $from;
     }
 
     /**
@@ -37,7 +39,7 @@ class SendEmailJobs implements ShouldQueue
     public function handle()
     {
         Log::info('llega aqui');
-        $email = new SendEmailCodigo($this->codigo);
+        $email = new SendEmailCodigo($this->codigo, $this->from);
         Mail::to($this->emailuser)->send($email);
     }
 }

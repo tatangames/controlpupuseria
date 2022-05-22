@@ -12,15 +12,17 @@ class SendEmailCodigo extends Mailable
     use Queueable, SerializesModels;
 
     public $codigo;
+    public $from;
 
     /**
      * Constructor
      *
      * @return void
      */
-    public function __construct($codigo)
+    public function __construct($codigo, $from)
     {
         $this->codigo = $codigo;
+        $this->from = $from;
     }
 
     /**
@@ -30,11 +32,11 @@ class SendEmailCodigo extends Mailable
      */
     public function build()
     {
-        $from = config('googleapi.Correo_API');
+
         $subject = 'Recuperación de contraseña';
         $name = 'El Tuncazo';
 
-        return $this->from($from, $name)
+        return $this->from($this->from, $name)
             ->subject($subject)
             ->view('backend.correos.vistacorreocodigo')
             ->with([
