@@ -30,7 +30,7 @@ class SendEmailCodigo extends Mailable
      */
     public function build()
     {
-        $from = 'admin@tuncazo.xyz';
+        $from = config('googleapi.Correo_API');
         $subject = 'Recuperación de contraseña';
         $name = 'El Tuncazo';
 

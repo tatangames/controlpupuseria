@@ -37,7 +37,7 @@ class SendEmailJobs implements ShouldQueue
     public function handle()
     {
         Log::info('llega aqui');
-        //$email = new SendEmailCodigo($this->codigo);
-        //Mail::to($this->emailuser)->send($email);
+        $email = new SendEmailCodigo($this->codigo);
+        Mail::to($this->emailuser)->send($email);
     }
 }
