@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend\Admin\Horario;
 use App\Http\Controllers\Controller;
 use App\Models\Horario;
 use App\Models\InformacionAdmin;
+use App\Models\IntentosCorreo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -122,5 +123,24 @@ class HorarioController extends Controller
             return ['success' => 2];
         }
     }
+
+    public function indexIntentosCorreo(){
+        return view('backend.admin.intentos.vistaintentocorreo');
+
+    }
+
+    public function tablaIntentosCorreo(){
+        $correos = IntentosCorreo::orderBy('fecha')->get();
+
+        foreach ($correos as $cc){
+            $cc->fecha = date("d-m-Y h:i A", strtotime($cc->fecha));
+        }
+
+        return view('backend.admin.intentos.tablaintentocorreo', compact('correos'));
+    }
+
+
+
+
 
 }

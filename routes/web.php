@@ -160,5 +160,9 @@ Route::get('/admin/configuracion/tablas', [HorarioController::class, 'tablaConfi
 Route::post('/admin/configuracion/informacion', [HorarioController::class,'informacionConfiguracion']);
 Route::post('/admin/configuracion/editar', [HorarioController::class,'editarConfiguracion']);
 
+// --- INTENTOS DE RECUPERACION DE CONTRASEÑA ---
+Route::get('/admin/intentos-correo/lista', [HorarioController::class, 'indexIntentosCorreo'])->name('index.intentos.correo');
+Route::get('/admin/intentos-correo/tabla/lista', [HorarioController::class, 'tablaIntentosCorreo']);
+
 
 

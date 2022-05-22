@@ -183,6 +183,13 @@
                                 <p>Listado de Clientes</p>
                             </a>
                         </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('index.intentos.correo') }}" target="frameprincipal" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Intentos de Recuperación</p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
 
