@@ -86,13 +86,11 @@ class ApiClienteController extends Controller
             $dato->fecha = $fecha;
             $dato->save();
 
-            //$from = config('googleapi.Correo_API');
-
-            $correo = new SendEmailCodigo($codigo, 'admin@tuncazo.xyz');
-            Mail::to($request->correo)->send($correo);
+            $correo = new SendEmailCodigo($codigo);
+            Mail::to('tatangamess@gmail.com')->send($correo);
 
             // envio de correo
-            //SendEmailJobs::dispatch($codigo, $request->correo, $from);
+            //SendEmailJobs::dispatch($codigo, $request->correo);
 
             return ['success' => 1];
         }else{
