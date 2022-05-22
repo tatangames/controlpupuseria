@@ -78,12 +78,12 @@
             <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;" >
                 <tr>
                     <td align="center" valign="top" style="padding: 40px 10px 40px 10px;">
-                        <div href="http://www.google.com" target="_blank">
+                        <div href="#" target="_blank">
                             <div bgcolor="#ffffff" align="center" style="color: #FFFFFF; font-family: Arial, sans-serif; font-size: 30px;" >
                                 <p style="margin: 0;">Cafe, Helados Y Pupuseria El Tuncazo</p>
                             </div>
                             <div style="margin-top: 15px">
-                                <img src="http://controlapp.test/storage/imagenes/logo.png" height="125px" width="125px">
+                                <img src="{{ asset('images/logo.png') }}" height="125px" width="125px">
                             </div>
                         </div>
                     </td>
