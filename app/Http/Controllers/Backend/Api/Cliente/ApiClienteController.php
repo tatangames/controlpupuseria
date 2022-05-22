@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend\Api\Cliente;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\SendEmailJobs;
+use App\Mail\SendEmailCodigo;
 use App\Models\Clientes;
 use App\Models\InformacionAdmin;
 use App\Models\IntentosCorreo;
@@ -11,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class ApiClienteController extends Controller
@@ -28,8 +30,6 @@ class ApiClienteController extends Controller
         if ( $validator->fails()){
             return ['success' => 0];
         }
-
-
 
         if($info = Clientes::where('usuario', $request->usuario)->first()){
 
@@ -85,6 +85,9 @@ class ApiClienteController extends Controller
             $dato->correo = $request->correo;
             $dato->fecha = $fecha;
             $dato->save();
+
+            //$correo = new SendEmailCodigo($codigo);
+            //Mail::to('tatangamess@gmail.com')->send($correo);
 
             // envio de correo
             SendEmailJobs::dispatch($codigo, $request->correo);
