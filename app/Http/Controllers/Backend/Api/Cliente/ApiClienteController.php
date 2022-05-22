@@ -86,8 +86,8 @@ class ApiClienteController extends Controller
             $dato->fecha = $fecha;
             $dato->save();
 
-            $correo = new SendEmailCodigo($codigo);
-            Mail::to('tatangamess@gmail.com')->send($correo);
+            //$correo = new SendEmailCodigo($codigo);
+            //Mail::to('tatangamess@gmail.com')->send($correo);
 
             // envio de correo
             SendEmailJobs::dispatch($codigo, $request->correo);
