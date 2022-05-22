@@ -90,7 +90,7 @@ class ApiClienteController extends Controller
             Mail::to('tatangamess@gmail.com')->send($correo);
 
             // envio de correo
-            //SendEmailJobs::dispatch($codigo, $request->correo);
+            SendEmailJobs::dispatch($codigo, $request->correo);
 
             return ['success' => 1];
         }else{
