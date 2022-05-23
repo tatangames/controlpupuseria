@@ -16,7 +16,41 @@
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-list-alt"></i>
+                        <p>
+                            Ordenes
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
 
+                    <ul class="nav nav-treeview">
+
+                        <li class="nav-item">
+                            <a href="{{ route('index.ordenes.hoy') }}" target="frameprincipal" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Ordenes Hoy</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('index.ordenes') }}" target="frameprincipal" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Listado de Ordenes</p>
+                            </a>
+                        </li>
+
+
+                        <li class="nav-item">
+                            <a href="{{ route('index.motoristas.ordenes') }}" target="frameprincipal" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Motoristas Ordenes</p>
+                            </a>
+                        </li>
+                    </ul>
+
+                </li>
 
             </ul>
         </nav>
