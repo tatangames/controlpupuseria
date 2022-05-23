@@ -25,7 +25,7 @@
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
     @include("backend.menus.navbar")
-
+    @include("backend.menus.sidebar")
 
     @include("backend.menus.footer")
 
