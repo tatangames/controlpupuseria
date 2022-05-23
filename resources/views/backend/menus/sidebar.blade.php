@@ -90,7 +90,90 @@
                     </li>
                 @endcan
 
-                @can('seccion.administradores')
+
+                @can('seccion.personal')
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="far fa-edit"></i>
+                            <p>
+                                Personal
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{{ route('index.afiliados') }}" target="frameprincipal" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Lista de Propietarios</p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{ route('index.motoristas') }}" target="frameprincipal" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Lista de Motoristas</p>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </li>
+                @endcan
+
+
+                @can('seccion.servicios')
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="far fa-edit"></i>
+                            <p>
+                                Servicios
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{{ route('index.bloques') }}" target="frameprincipal" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Servicios</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                @endcan
+
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-edit"></i>
+                        <p>
+                            Clientes
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('index.clientes.registrados.hoy') }}" target="frameprincipal" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Registrados Hoy</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('index.clientes.listado') }}" target="frameprincipal" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Listado de Clientes</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('index.intentos.correo') }}" target="frameprincipal" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Intentos de Recuperación</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+
+            @can('seccion.administradores')
                     <li class="nav-item">
                         <a href="{{ route('admin.permisos.index') }}" target="frameprincipal" class="nav-link">
                             <i class="far fa-user nav-icon"></i>
