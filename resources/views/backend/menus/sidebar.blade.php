@@ -90,6 +90,16 @@
                     </li>
                 @endcan
 
+                @can('seccion.administradores')
+                    <li class="nav-item">
+                        <a href="{{ route('admin.permisos.index') }}" target="frameprincipal" class="nav-link">
+                            <i class="far fa-user nav-icon"></i>
+                            <p>Administradores</p>
+                        </a>
+                    </li>
+                @endcan
+
+
 
             </ul>
         </nav>
