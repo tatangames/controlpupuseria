@@ -35,6 +35,8 @@ class ControlController extends Controller
 
         $ruta = 'admin.roles.index';
 
+        return "va por aqui";
+
         return view('backend.index', compact('user', 'ruta'));
     }
 
