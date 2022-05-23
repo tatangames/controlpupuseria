@@ -30,8 +30,8 @@
     <div class="content-wrapper" style=" background-color: #fff;">
         <!-- redireccionamiento de vista -->
 
-
-
+        <iframe style="width: 100%; resize: initial; overflow: hidden; min-height: 83vh" frameborder="0"  scrolling="" id="frameprincipal" src="{{ route($ruta) }}" name="frameprincipal">
+        </iframe>
 
     </div>
 
