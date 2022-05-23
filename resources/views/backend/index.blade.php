@@ -24,19 +24,8 @@
 
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
-    @include("backend.menus.navbar")
-    @include("backend.menus.sidebar")
 
-    <div class="content-wrapper" style=" background-color: #fff;">
-        <!-- redireccionamiento de vista -->
-
-
-        <iframe style="width: 100%; resize: initial; overflow: hidden; min-height: 83vh" frameborder="0"  scrolling="" id="frameprincipal" src="{{ route($ruta) }}" name="frameprincipal">
-        </iframe>
-
-    </div>
-
-    @include("backend.menus.footer")
+    <h1>ffff</h1>
 
 </div>
 
