@@ -25,7 +25,15 @@
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
     @include("backend.menus.navbar")
+    @include("backend.menus.sidebar")
 
+    <div class="content-wrapper" style=" background-color: #fff;">
+        <!-- redireccionamiento de vista -->
+
+
+
+
+    </div>
 
     @include("backend.menus.footer")
 
