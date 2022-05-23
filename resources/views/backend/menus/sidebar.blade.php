@@ -111,6 +111,36 @@
                 </li>
                 @endcan
 
+                @can('seccion.personal')
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="far fa-edit"></i>
+                        <p>
+                            Personal
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('index.afiliados') }}" target="frameprincipal" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Lista de Propietarios</p>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('index.motoristas') }}" target="frameprincipal" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Lista de Motoristas</p>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+                @endcan
+
 
 
                 <!-- fin del acordeon -->
