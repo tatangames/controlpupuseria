@@ -9,6 +9,14 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
+                <li class="nav-item">
+                    <a href="{{ route('index.estadisticas') }}" target="frameprincipal" class="nav-link">
+                        <i class="fas fa-edit nav-icon"></i>
+                        <p>Estadísticas</p>
+                    </a>
+                </li>
+
+
 
             </ul>
         </nav>
