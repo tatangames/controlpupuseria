@@ -35,6 +35,7 @@ class ApiCategoriaAfiliadoController extends Controller
 
             $categorias = Categorias::orderBy('posicion', 'ASC')
                 ->where('activo', 1)
+                ->whereNotIn('bloque_servicios_id', [1])
                 ->get();
 
             return ['success'=> 1, 'categorias'=> $categorias];
@@ -126,8 +127,8 @@ class ApiCategoriaAfiliadoController extends Controller
 
             // buscar lista de productos
             $categorias = Producto::where('categorias_id', $request->idcategoria)
-                ->orderBy('posicion', 'ASC')
                 ->where('activo', 1) // activo producto por admin
+                ->orderBy('posicion', 'ASC')
                 ->get();
 
             return ['success'=> 1, 'categorias'=> $categorias];
@@ -169,7 +170,7 @@ class ApiCategoriaAfiliadoController extends Controller
 
         if($validarDatos->fails()){return ['success' => 0]; }
 
-        if($p = Afiliados::where('id', $request->id)->first()){
+        if(Afiliados::where('id', $request->id)->first()){
 
             $lista = Categorias::where('activo', 1)
                 ->whereNotIn('bloque_servicios_id', [1])
