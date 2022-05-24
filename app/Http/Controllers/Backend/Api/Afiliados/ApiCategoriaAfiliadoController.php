@@ -172,6 +172,7 @@ class ApiCategoriaAfiliadoController extends Controller
         if($p = Afiliados::where('id', $request->id)->first()){
 
             $lista = Categorias::where('activo', 1)
+                ->whereNotIn('bloque_servicios_id', [1])
                 ->orderBy('posicion', 'ASC')
                 ->get();
 
