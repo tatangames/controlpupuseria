@@ -33,8 +33,6 @@ class ControlController extends Controller
             $ruta = 'no.permisos.index';
         }
 
-        $ruta = 'admin.roles.index';
-
         return view('backend.index', compact('user', 'ruta'));
     }
 
