@@ -465,5 +465,19 @@ class CategoriasController extends Controller
         }
     }
 
+    public function ordenarProductos(Request $request){
 
+        $tasks = Producto::all();
+
+        foreach ($tasks as $task) {
+            $id = $task->id;
+
+            foreach ($request->order as $order) {
+                if ($order['id'] == $id) {
+                    $task->update(['posicion' => $order['posicion']]);
+                }
+            }
+        }
+        return ['success' => 1];
+    }
 }
