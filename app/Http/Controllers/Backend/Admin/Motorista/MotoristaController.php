@@ -128,19 +128,22 @@ class MotoristaController extends Controller
             $mm->fecha_orden = date("h:i A d-m-Y", strtotime($infoOrdenes->fecha_orden));
             $mm->orden = $infoOrdenes->id;
 
+            $estado = "";
+
             if($infoOrdenes->estado_5 == 1){
-                $mm->estado = "Orden Entregada";
-            }else if($infoOrdenes->estado_7 == 1){
+                $estado = "Orden Entregada";
+            }
+
+            if($infoOrdenes->estado_7 == 1){
 
                 if($infoOrdenes->cancelado == 1){
-                    $mm->estado = "Orden Cancelada por: Cliente";
+                    $estado = "Orden Cancelada por: Cliente";
                 }else{
-                    $mm->estado = "Orden Cancelada por: Propietario";
+                    $estado = "Orden Cancelada por: Propietario";
                 }
-
-            }else{
-                $mm->estado = "";
             }
+
+            $mm->estado = $estado;
         }
 
         return view('backend.admin.motoristas.ordenes.tablavistamotoristaordenes', compact('motoristas'));

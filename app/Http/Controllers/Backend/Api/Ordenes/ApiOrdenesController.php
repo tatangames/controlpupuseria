@@ -271,22 +271,27 @@ class ApiOrdenesController extends Controller
 
                 $o->fecha_orden = date("h:i A d-m-Y", strtotime($o->fecha_orden));
 
+                $estado = "";
+
                 if($o->estado_5 == 1){
-                    $o->estado = "Orden Entregada";
+                    $estado = "Orden Entregada";
                 }
-                else if($o->estado_7 == 1){
+
+                if($o->estado_7 == 1){
 
                     if($o->cancelado == 2){
                         // propietario
                         if($o->mensaje_7 != null){
-                            $o->estado = "Orden Cancelada: " . $o->mensaje_7;
+                            $estado = "Orden Cancelada: " . $o->mensaje_7;
                         }else{
-                            $o->estado = "Orden Cancelada";
+                            $estado = "Orden Cancelada";
                         }
                     }else{
-                        $o->estado = "Orden Cancelada";
+                        $estado = "Orden Cancelada";
                     }
                 }
+
+                $o->estado = $estado;
 
                 $total = $o->precio_envio + $o->precio_consumido;
                 $o->precio_envio = number_format((float)$o->precio_envio, 2, '.', ',');

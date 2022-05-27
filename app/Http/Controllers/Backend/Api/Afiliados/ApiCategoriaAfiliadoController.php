@@ -459,6 +459,25 @@ class ApiCategoriaAfiliadoController extends Controller
                     SendNotiClienteJobs::dispatch($titulo, $mensaje, $infoCliente->token_fcm);
                 }
 
+                // notificacion a motorista que hay orden nueva
+                /*$listaMotoristas = Motoristas::where('activo', 1)
+                    ->where('disponible', 1)
+                    ->get();
+
+                $pilaMotoristas = array();
+                foreach($listaMotoristas as $p){
+                    if($p->token_fcm != null){
+                        array_push($pilaMotoristas, $p->token_fcm);
+                    }
+                }
+
+                $titulo = "Hay Nuevas Ordenes";
+                $mensaje = "Por Favor Verificar";
+
+                if($pilaMotoristas != null) {
+                    SendNotiMotoristaJobs::dispatch($titulo, $mensaje, $pilaMotoristas);
+                }*/
+
                 // orden iniciada
                 return ['success' => 2];
             }
@@ -641,27 +660,31 @@ class ApiCategoriaAfiliadoController extends Controller
 
                 $o->fecha_orden = date("d-m-Y h:i A", strtotime($o->fecha_orden));
 
+                $estado = "";
+
                 if($o->estado_2 == 1){
-                    $o->estado = "Orden Preparandose";
+                    $estado = "Orden Preparandose";
                 }
                 if($o->estado_3 == 1){
-                    $o->estado = "Orden lista para Entrega";
+                    $estado = "Orden lista para Entrega";
                 }
-                else if($o->estado_4 == 1){
-                    $o->estado = "Orden En Camino";
+                if($o->estado_4 == 1){
+                    $estado = "Orden En Camino";
                 }
-                else if($o->estado_ == 5){
-                    $o->estado = "Orden Entregada";
+                if($o->estado_4 == 1){
+                    $estado = "Orden Entregada";
                 }
-                else if($o->estado_7 == 1){
+
+                if($o->estado_7 == 1){
                     if($o->cancelado == 1){
-                        $o->estado = "Orden Cancelada Por: Cliente";
+                        $estado = "Orden Cancelada Por: Cliente";
                     }else{
-                        $o->estado = "Orden Cancelada Por: Propietario";
+                        $estado = "Orden Cancelada Por: Propietario";
                     }
-                }else{
-                    $o->estado = "";
                 }
+
+                $o->estado = $estado;
+
                 $vendido = $vendido + $o->precio_consumido;
                 $o->precio_consumido = number_format((float)$o->precio_consumido, 2, '.', ',');
                 $infoCliente = OrdenesDirecciones::where('ordenes_id', $o->id)->first();

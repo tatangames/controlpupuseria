@@ -84,7 +84,7 @@
 
             openLoading();
 
-            axios.post('/bloques/ordenar',  {
+            axios.post('/admin/bloques/ordenar',  {
                 'order': order
             })
                 .then((response) => {

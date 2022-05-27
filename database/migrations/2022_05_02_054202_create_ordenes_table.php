@@ -26,7 +26,6 @@ class CreateOrdenesTable extends Migration
 
             $table->boolean('estado_2');
             $table->dateTime('fecha_2')->nullable();
-            $table->integer('hora_2')->default(0);
 
             $table->boolean('estado_3');
             $table->dateTime('fecha_3')->nullable();

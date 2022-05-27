@@ -473,7 +473,6 @@ class ApiCarritoController extends Controller
 
                         'estado_2' => 0, // el propietario inicia la orden
                         'fecha_2' => null,
-                        'hora_2' => 0,
 
                         'estado_3' => 0, // el propietario finaliza la orden
                         'fecha_3' => null,

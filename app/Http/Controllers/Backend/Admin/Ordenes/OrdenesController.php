@@ -36,31 +36,38 @@ class OrdenesController extends Controller
                 $mm->calificacion = "Estrellas: " . $infoE->experiencia . " y Nota es: " . $infoE->mensaje;
             }
 
+            $estado = "Orden Nueva";
+
             if($mm->estado_2 == 1){
-                $mm->estado = "Orden Iniciada";
+                $estado = "Orden Iniciada";
             }
-            elseif($mm->estado_3 == 2){
-                $mm->estado = "Orden Terminada";
+
+            if($mm->estado_3 == 2){
+                $estado = "Orden Terminada";
             }
-            else if($mm->estado_4 == 1){
-                $mm->estado = "Motorista en Camino";
+
+            if($mm->estado_4 == 1){
+                $estado = "Motorista en Camino";
             }
-            else if($mm->estado_5 == 1){
-                $mm->estado = "Orden Entregada";
+
+            if($mm->estado_5 == 1){
+                $estado = "Orden Entregada";
             }
-            else if($mm->estado_6 == 1){
-                $mm->estado = "Orden Calificada";
+
+            if($mm->estado_6 == 1){
+                $estado = "Orden Calificada";
             }
-            else if($mm->estado_7 == 1){
+
+            if($mm->estado_7 == 1){
 
                 if($mm->cancelado == 1){
-                    $mm->estado = "Orden Cancelada por: Cliente";
+                    $estado = "Orden Cancelada por: Cliente";
                 }else{
-                    $mm->estado = "Orden Cancelada por: Propietario";
+                    $estado = "Orden Cancelada por: Propietario";
                 }
-            }else{
-                $mm->estado = "Orden Nueva";
             }
+
+            $mm->estado = $estado;
         }
 
         return view('backend.admin.ordenes.todas.tablaordenes', compact('ordenes'));
@@ -135,31 +142,38 @@ class OrdenesController extends Controller
                 $mm->calificacion = "Estrellas: " . $infoE->experiencia . " y Nota es: " . $infoE->mensaje;
             }
 
+            $estado = "Orden Nueva";
+
             if($mm->estado_2 == 1){
-                $mm->estado = "Orden Iniciada";
+                $estado = "Orden Iniciada";
             }
-            elseif($mm->estado_3 == 2){
-                $mm->estado = "Orden Terminada";
+
+            if($mm->estado_3 == 1){
+                $estado = "Orden Terminada";
             }
-            else if($mm->estado_4 == 1){
-                $mm->estado = "Motorista en Camino";
+
+            if($mm->estado_4 == 1){
+                $estado = "Motorista en Camino";
             }
-            else if($mm->estado_5 == 1){
-                $mm->estado = "Orden Entregada";
+
+            if($mm->estado_5 == 1){
+                $estado = "Orden Entregada";
             }
-            else if($mm->estado_6 == 1){
-                $mm->estado = "Orden Calificada";
+
+            if($mm->estado_6 == 1){
+                $estado = "Orden Calificada";
             }
-            else if($mm->estado_7 == 1){
+
+            if($mm->estado_7 == 1){
 
                 if($mm->cancelado == 1){
-                    $mm->estado = "Orden Cancelada por: Cliente";
+                    $estado = "Orden Cancelada por: Cliente";
                 }else{
-                    $mm->estado = "Orden Cancelada por: Propietario";
+                    $estado = "Orden Cancelada por: Propietario";
                 }
-            }else{
-                $mm->estado = "Orden Nueva";
             }
+
+            $mm->estado = $estado;
         }
 
         return view('backend.admin.ordenes.hoy.tablaordeneshoy', compact('ordenes'));

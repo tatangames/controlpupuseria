@@ -70,8 +70,6 @@ class ApiMotoristasController extends Controller
                 return ['success' => 1];
             }
 
-            $moto = Motoristas::where('id', $request->id)->get();
-
             $noquiero = DB::table('motoristas_ordenes AS mo')->get();
 
             $pilaOrden = array();
@@ -80,7 +78,7 @@ class ApiMotoristasController extends Controller
             }
 
             $orden = Ordenes::where('estado_5', 0)
-                ->where('estado_3', 1) // inicia la orden
+                ->where('estado_2', 1) // inicia la orden
                 ->where('estado_7', 0) // orden no cancelada
                 ->whereNotIn('id', $pilaOrden)
                 ->get();
@@ -230,7 +228,7 @@ class ApiMotoristasController extends Controller
 
             $orden = DB::table('motoristas_ordenes AS mo')
                 ->join('ordenes AS o', 'o.id', '=', 'mo.ordenes_id')
-                ->select('o.id', 'o.precio_consumido', 'o.fecha_4', 'o.hora_2',
+                ->select('o.id', 'o.precio_consumido', 'o.fecha_4',
                     'o.estado_5', 'o.estado_6', 'o.precio_envio',
                     'o.estado_7', 'o.visible_m', 'o.nota', 'o.fecha_orden')
                 ->where('o.estado_6', 0) // aun sin entregar al cliente
@@ -420,7 +418,7 @@ class ApiMotoristasController extends Controller
 
             $orden = DB::table('motoristas_ordenes AS mo')
                 ->join('ordenes AS o', 'o.id', '=', 'mo.ordenes_id')
-                ->select('o.id', 'o.precio_consumido', 'o.fecha_4', 'o.hora_2',
+                ->select('o.id', 'o.precio_consumido', 'o.fecha_4',
                     'o.precio_envio','o.estado_7', 'o.visible_m', 'o.fecha_orden',
                     'o.nota')
                 ->where('o.estado_4', 1) // motorista inicio entrega
