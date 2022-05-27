@@ -460,7 +460,7 @@ class ApiCategoriaAfiliadoController extends Controller
                 }
 
                 // notificacion a motorista que hay orden nueva
-                /*$listaMotoristas = Motoristas::where('activo', 1)
+                $listaMotoristas = Motoristas::where('activo', 1)
                     ->where('disponible', 1)
                     ->get();
 
@@ -476,7 +476,7 @@ class ApiCategoriaAfiliadoController extends Controller
 
                 if($pilaMotoristas != null) {
                     SendNotiMotoristaJobs::dispatch($titulo, $mensaje, $pilaMotoristas);
-                }*/
+                }
 
                 // orden iniciada
                 return ['success' => 2];
