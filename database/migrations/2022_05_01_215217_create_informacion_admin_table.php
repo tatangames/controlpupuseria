@@ -22,6 +22,9 @@ class CreateInformacionAdminTable extends Migration
 
             // para el CRON que envia notificacion a cada propietario si hay ordenes sin contestas
             $table->boolean('activo_noti');
+
+            // mostrar o no los slider
+            $table->boolean('activo_slider');
         });
     }
 

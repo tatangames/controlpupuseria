@@ -34,8 +34,9 @@ class CreateZonasTable extends Migration
             // visibilidad de la zona en el mapa
             $table->boolean('activo');
 
-            // precios envio de zona
-            $table->decimal('precio_envio', 10, 2);
+            // minimo de consumo para envio a $0.00
+            $table->decimal('minimo_consumo', 10, 2);
+
         });
     }
 

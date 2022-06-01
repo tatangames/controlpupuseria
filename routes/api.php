@@ -31,6 +31,10 @@ Route::get('listado/zonas/poligonos', [ApiPerfilController::class, 'puntosZonaPo
 Route::post('cliente/nueva/direccion', [ApiPerfilController::class, 'nuevaDireccionCliente']);
 Route::post('cliente/perfil/cambiar-password', [ApiPerfilController::class, 'cambiarPasswordPerfil']);
 
+// --- BLOQUE SLIDER ----
+Route::get('cliente/sliders/listado', [ApiServiciosController::class, 'listadoSliders']);
+
+
 // --- BLOQUE DE SERVICIOS ---
 Route::post('cliente/lista/servicios-bloque', [ApiZonasServiciosController::class, 'listadoBloque']);
 

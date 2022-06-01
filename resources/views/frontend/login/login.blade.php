@@ -29,7 +29,7 @@
     }
     body {
         font-family: 'Roboto', sans-serif;
-        background-image: linear-gradient(to top, #7028e4 0%, #e5b2ca 100%);
+        background-image:url({{url('images/fondo.jpg')}})
     }
     .demo-container {
         height: 100%;
@@ -89,8 +89,8 @@
                     <img src="{{ asset('images/logo.png') }}" class="rounded-circle p-2 bg-white">
                 </div>
                 <div class="p-5 bg-white rounded shadow-lg">
-                    <h3 class="mb-2 text-center pt-5">PANEL DE CONTROL EL TUNCAZO</h3>
-                    <p class="text-center lead">Cafe, Helados Y Pupusería El Tuncazo</p>
+                    <h3 class="mb-2 text-center pt-5">PANEL DE CONTROL</h3>
+                    <p class="text-center lead">Salsa y Curtido</p>
                     <form class=" validate-form">
 
                         <div class="input-group form-group" style="margin-top: 25px">
@@ -110,7 +110,7 @@
                         <br>
                         <br>
                         <div class="form-group text-center">
-                            <input type="button" value="ACCEDER" onclick="login()" id="btnLogin" class="btn btn-lg w-100 shadow-lg" style="background: #673AB7; color: white">
+                            <input type="button" value="ACCEDER" onclick="login()" id="btnLogin" class="btn btn-lg w-100 shadow-lg" style="background: #f10000; color: white">
                         </div>
                     </form>
 

@@ -22,11 +22,11 @@
 <section class="content-header">
     <div class="container-fluid">
         <div class="row">
-            <h1>Categorías</h1>
+            <h1>Slider</h1>
 
             <button type="button" style="margin-left: 30px" onclick="modalNuevo()" class="btn btn-info btn-sm">
                 <i class="fas fa-pencil-alt"></i>
-                Nueva Categoría
+                Nuevo Slider
             </button>
         </div>
 
@@ -37,7 +37,7 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-header" id="card-header-color">
-                <h3 class="card-title" style="color: white">Lista de Categorías</h3>
+                <h3 class="card-title" style="color: white">Lista de Sliders</h3>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -56,7 +56,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Nuevo Categoría</h4>
+                <h4 class="modal-title">Nuevo Slider</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -68,10 +68,20 @@
                             <div class="col-md-12">
 
                                 <div class="form-group">
-                                    <label>Nombre</label>
-                                    <input type="text" maxlength="100" class="form-control" autocomplete="off" id="nombre-nuevo" placeholder="Nombre">
+                                    <label>Descripción</label>
+                                    <input type="text" maxlength="300" class="form-control" id="nombre-nuevo" placeholder="Descripción">
                                 </div>
 
+                                <div class="form-group">
+                                    <div>
+                                        <label>Imagen</label>
+                                        <p>Tamaño recomendado de: 600 x 400 px</p>
+                                    </div>
+                                    <br>
+                                    <div class="col-md-10">
+                                        <input type="file" style="color:#191818" id="imagen-nuevo" accept="image/jpeg, image/jpg, image/png"/>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -86,12 +96,12 @@
 </div>
 
 
-<!-- modal editar -->
-<div class="modal fade" id="modalEditar">
+<!-- modal editar-->
+<div class="modal fade" id="modalEditar" >
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Editar Categoría</h4>
+                <h4 class="modal-title">Editar Slider</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -104,29 +114,7 @@
                             <div class="form-group">
                                 <label>Nombre</label>
                                 <input type="hidden" id="id-editar">
-                                <input type="text" maxlength="100" class="form-control" id="nombre-editar" placeholder="Nombre">
-                            </div>
-
-                            <div class="form-group" style="margin-left:0px">
-                                <label>Activo</label><br>
-                                <label class="switch" style="margin-top:10px">
-                                    <input type="checkbox" id="toggle-activo">
-                                    <div class="slider round">
-                                        <span class="on">Activo</span>
-                                        <span class="off">Inactivo</span>
-                                    </div>
-                                </label>
-                            </div>
-
-                            <div class="form-group" style="margin-left:0px">
-                                <label>Visible</label><br>
-                                <label class="switch" style="margin-top:10px">
-                                    <input type="checkbox" id="toggle-visible">
-                                    <div class="slider round">
-                                        <span class="on">Activo</span>
-                                        <span class="off">Inactivo</span>
-                                    </div>
-                                </label>
+                                <input type="text" maxlength="300" class="form-control" id="nombre-editar" placeholder="Descripción">
                             </div>
 
                         </div>
@@ -154,8 +142,7 @@
 
     <script type="text/javascript">
         $(document).ready(function(){
-            var id = {{ $id }};
-            var ruta = "{{ URL::to('/admin/categorias/tablas') }}/"+id;
+            var ruta = "{{ URL::to('/admin/sliders/tablas') }}";
             $('#tablaDatatable').load(ruta);
         });
     </script>
@@ -163,8 +150,7 @@
     <script>
 
         function recargar(){
-            var id = {{ $id }};
-            var ruta = "{{ URL::to('/admin/categorias/tablas') }}/"+id;
+            var ruta = "{{ url('/admin/sliders/tablas') }}";
             $('#tablaDatatable').load(ruta);
         }
 
@@ -178,25 +164,30 @@
         function nuevo(){
 
             var nombre = document.getElementById('nombre-nuevo').value;
-            var id = {{ $id }};
+            var imagen = document.getElementById('imagen-nuevo');
 
-            if(nombre === '') {
-                toastr.error('Nombre es requerido');
+            if(nombre.length > 300){
+                toastr.error('Descripción máximo 300 caracteres');
                 return;
             }
 
-            if(nombre.length > 100){
-                toastr.error('Nombre máximo 100 caracteres');
+            if(imagen.files && imagen.files[0]){ // si trae imagen
+                if (!imagen.files[0].type.match('image/jpeg|image/jpeg|image/png')){
+                    toastr.error('Formato de imagen permitido: .png .jpg .jpeg');
+                    return;
+                }
+            }else{
+                toastr.error('Imagen es requerido');
                 return;
             }
 
             openLoading();
 
             var formData = new FormData();
-            formData.append('id', id);
             formData.append('nombre', nombre);
+            formData.append('imagen', imagen.files[0]);
 
-            axios.post('/admin/categorias/nuevo', formData, {
+            axios.post('/admin/sliders/nuevo', formData, {
             })
                 .then((response) => {
                     closeLoading();
@@ -220,7 +211,7 @@
             document.getElementById("formulario-editar").reset();
             openLoading();
 
-            axios.post('/admin/categorias/informacion',{
+            axios.post('/admin/sliders/informacion',{
                 'id': id
             })
                 .then((response) => {
@@ -229,19 +220,7 @@
 
                         $('#modalEditar').modal('show');
                         $('#id-editar').val(id);
-                        $('#nombre-editar').val(response.data.categoria.nombre);
-
-                        if(response.data.categoria.activo === 0){
-                            $("#toggle-activo").prop("checked", false);
-                        }else{
-                            $("#toggle-activo").prop("checked", true);
-                        }
-
-                        if(response.data.categoria.visible === 0){
-                            $("#toggle-visible").prop("checked", false);
-                        }else{
-                            $("#toggle-visible").prop("checked", true);
-                        }
+                        $('#nombre-editar').val(response.data.slider.descripcion);
 
                     }else{
                         toastr.error('Error al buscar');
@@ -257,19 +236,9 @@
 
             var id = document.getElementById('id-editar').value;
             var nombre = document.getElementById('nombre-editar').value;
-            var cbactivo = document.getElementById('toggle-activo').checked;
-            var cbvisible = document.getElementById('toggle-visible').checked;
 
-            var check_activo = cbactivo ? 1 : 0;
-            var check_visible = cbvisible ? 1 : 0;
-
-            if(nombre === '') {
-                toastr.error('Nombre es requerido');
-                return;
-            }
-
-            if(nombre.length > 100){
-                toastr.error('Nombre máximo 100 caracteres');
+            if(nombre.length > 300){
+                toastr.error('Descripción máximo 300 caracteres');
                 return;
             }
 
@@ -277,10 +246,8 @@
             var formData = new FormData();
             formData.append('id', id);
             formData.append('nombre', nombre);
-            formData.append('cbactivo', check_activo);
-            formData.append('cbvisible', check_visible);
 
-            axios.post('/admin/categorias/editar', formData, {
+            axios.post('/admin/sliders/editar', formData, {
             })
                 .then((response) => {
                     closeLoading();
@@ -299,10 +266,46 @@
                 });
         }
 
-        function verProductos(id) {
-            window.location.href="{{ url('/admin/productos/') }}/"+id;
+        function informacionBorrar(id){
+            Swal.fire({
+                title: 'Borrar Slider?',
+                text: "",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Cancelar',
+                confirmButtonText: 'Si'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    borrarSlider(id);
+                }
+            })
         }
 
+        function borrarSlider(id){
+            openLoading();
+            var formData = new FormData();
+            formData.append('id', id);
+
+            axios.post('/admin/sliders/borrar', formData, {
+            })
+                .then((response) => {
+                    closeLoading();
+                    if (response.data.success === 1) {
+                        $('#modalEditar').modal('hide');
+                        toastr.success('Borrado correctamente');
+                        recargar();
+                    }
+                    else {
+                        toastr.error('Error al Borrar');
+                    }
+                })
+                .catch((error) => {
+                    toastr.error('Error al Borrar');
+                    closeLoading();
+                });
+        }
 
     </script>
 

@@ -10,6 +10,7 @@
                             <tr>
                                 <th>Cerrar App</th>
                                 <th>Mensaje Cerrado</th>
+                                <th>Estado Slider</th>
                                 <th>Opciones</th>
                             </tr>
                             </thead>
@@ -25,7 +26,13 @@
                                         @endif
                                     </td>
                                     <td>{{ $dato->mensaje_cerrado }}</td>
-
+                                    <td>
+                                        @if($dato->activo_slider == 0)
+                                            <span class="badge bg-danger">No</span>
+                                        @else
+                                            <span class="badge bg-success">Activo</span>
+                                        @endif
+                                    </td>
                                     <td>
                                         <button type="button" class="btn btn-primary btn-xs" onclick="verInformacion({{ $dato->id }})">
                                             <i class="fas fa-eye" title="Editar"></i>&nbsp; Editar

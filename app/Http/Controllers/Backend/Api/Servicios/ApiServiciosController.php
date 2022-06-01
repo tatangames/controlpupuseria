@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Backend\Api\Servicios;
 use App\Http\Controllers\Controller;
 use App\Models\BloqueServicios;
 use App\Models\BloquesEventos;
+use App\Models\BloqueSlider;
 use App\Models\Categorias;
 use App\Models\EventoImagenes;
+use App\Models\InformacionAdmin;
 use App\Models\Producto;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -80,6 +82,14 @@ class ApiServiciosController extends Controller
         $conteo = EventoImagenes::where('evento_id', $request->id)->count();
 
         return ['success' => 1, 'eventos' => $eventos, 'conteo' => $conteo];
+    }
+
+
+    public function listadoSliders(){
+        $slider = BloqueSlider::orderBy('posicion')->get();
+        $info = InformacionAdmin::where('id', 1)->first();
+
+        return ['success' => 1, 'eventos' => $slider, 'estado' => $info->activo_slider];
     }
 
 }

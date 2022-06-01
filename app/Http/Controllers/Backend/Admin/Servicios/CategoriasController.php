@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend\Admin\Servicios;
 
 use App\Http\Controllers\Controller;
 use App\Models\BloqueServicios;
+use App\Models\BloqueSlider;
 use App\Models\Categorias;
 use App\Models\Producto;
 use Illuminate\Http\Request;
@@ -479,5 +480,127 @@ class CategoriasController extends Controller
             }
         }
         return ['success' => 1];
+    }
+
+
+    // ---- SLIDERS ----
+    public function indexSliders(){
+        return view('backend.admin.slider.vistaSlider');
+    }
+
+    public function tablaSliders(){
+        $slider = BloqueSlider::orderBy('posicion')->get();
+
+        return view('backend.admin.slider.tablaSlider', compact('slider'));
+    }
+
+    public function nuevoSliders(Request $request){
+
+        if($request->file('imagen')){
+
+            $cadena = Str::random(15);
+            $tiempo = microtime();
+            $union = $cadena.$tiempo;
+            $nombre = str_replace(' ', '_', $union);
+
+            $extension = '.'.$request->imagen->getClientOriginalExtension();
+            $nombreFoto = $nombre.strtolower($extension);
+            $avatar = $request->file('imagen');
+            $upload = Storage::disk('imagenes')->put($nombreFoto, \File::get($avatar));
+
+            if($upload){
+
+                if($info = BloqueSlider::orderBy('posicion', 'DESC')->first()){
+                    $suma = $info->posicion + 1;
+                }else{
+                    $suma = 1;
+                }
+
+                $ca = new BloqueSlider();
+                $ca->descripcion = $request->nombre;
+                $ca->imagen = $nombreFoto;
+                $ca->posicion = $suma;
+
+                if($ca->save()){
+                    return ['success' => 1];
+                }else{
+                    return ['success' => 2];
+                }
+            }else{
+                return ['success' => 2];
+            }
+
+        }else {
+            return ['success' => 2];
+        }
+    }
+
+    public function ordenarSliders(Request $request){
+        $tasks = BloqueSlider::all();
+
+        foreach ($tasks as $task) {
+            $id = $task->id;
+
+            foreach ($request->order as $order) {
+                if ($order['id'] == $id) {
+                    $task->update(['posicion' => $order['posicion']]);
+                }
+            }
+        }
+        return ['success' => 1];
+    }
+
+    public function borrarSliders(Request $request){
+        $rules = array(
+            'id' => 'required',
+        );
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()){return ['success' => 0]; }
+
+        if($info = BloqueSlider::where('id', $request->id)->first()){
+
+            if(Storage::disk('imagenes')->exists($info->imagen)){
+                Storage::disk('imagenes')->delete($info->imagen);
+            }
+
+            BloqueSlider::where('id', $request->id)->delete();
+            return ['success' => 1];
+        }else{
+            return ['success' => 2];
+        }
+    }
+
+    public function informacionSlider(Request $request){
+
+        $regla = array(
+            'id' => 'required',
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){return ['success' => 0]; }
+
+        if($bloque = BloqueSlider::where('id', $request->id)->first()){
+
+            return ['success' => 1, 'slider' => $bloque];
+        }else{
+            return ['success' => 2];
+        }
+    }
+
+    public function editarSlider(Request $request){
+
+        if(BloqueSlider::where('id', $request->id)->first()){
+
+            BloqueSlider::where('id', $request->id)->update([
+                'descripcion' => $request->nombre
+            ]);
+
+            return ['success' => 1];
+        }else{
+            return ['success' => 2];
+        }
     }
 }

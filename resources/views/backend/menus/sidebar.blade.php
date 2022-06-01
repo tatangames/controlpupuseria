@@ -63,7 +63,6 @@
                             </a>
                         </li>
 
-
                         <li class="nav-item">
                             <a href="{{ route('index.motoristas.ordenes') }}" target="frameprincipal" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
@@ -153,6 +152,13 @@
                                 <a href="{{ route('index.bloques') }}" target="frameprincipal" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Servicios</p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{ route('index.sliders') }}" target="frameprincipal" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Slider</p>
                                 </a>
                             </li>
                         </ul>

@@ -15,7 +15,7 @@
     }
 
     #card-header-color {
-        background-color: #673AB7 !important;
+        background-color: #ff0000 !important;
     }
 </style>
 
@@ -92,7 +92,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Precio Envío</label>
+                                    <label>Precio Mínimo de Consumo</label>
                                     <input type="number" class="form-control" id="precio-nuevo" value="0.00">
                                 </div>
 
@@ -150,7 +150,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Precio Envío</label>
+                                    <label>Precio Mínimo de Consumo</label>
                                     <input type="number" class="form-control" id="precio-editar">
                                 </div>
 

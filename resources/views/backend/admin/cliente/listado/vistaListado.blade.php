@@ -14,7 +14,7 @@
         table-layout:fixed;
     }
     #card-header-color {
-        background-color: #673AB7 !important;
+        background-color: #ff0000 !important;
     }
 </style>
 

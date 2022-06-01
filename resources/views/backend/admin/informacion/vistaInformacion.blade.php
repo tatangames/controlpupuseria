@@ -15,7 +15,7 @@
     }
 
     #card-header-color {
-        background-color: #673AB7 !important;
+        background-color: #ff0000 !important;
     }
 </style>
 
@@ -84,6 +84,17 @@
                                     <label>Notificación cada minuto si una orden no ha sido respondida</label><br>
                                     <label class="switch" style="margin-top:10px">
                                         <input type="checkbox" id="toggle-noti">
+                                        <div class="slider round">
+                                            <span class="on">Activar</span>
+                                            <span class="off">Desactivar</span>
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <div class="form-group" style="margin-left:0px">
+                                    <label>Estado Slider</label><br>
+                                    <label class="switch" style="margin-top:10px">
+                                        <input type="checkbox" id="toggle-slider">
                                         <div class="slider round">
                                             <span class="on">Activar</span>
                                             <span class="off">Desactivar</span>
@@ -160,6 +171,12 @@
                             $("#toggle-noti").prop("checked", true);
                         }
 
+                        if(response.data.info.activo_slider === 0){
+                            $("#toggle-slider").prop("checked", false);
+                        }else{
+                            $("#toggle-slider").prop("checked", true);
+                        }
+
                     }else{
                         toastr.error('Error al Buscar');
                     }
@@ -175,9 +192,11 @@
             var mensaje = document.getElementById('mensaje').value;
             var tp = document.getElementById('toggle-cerrado').checked;
             var tn = document.getElementById('toggle-noti').checked;
+            var ts = document.getElementById('toggle-slider').checked;
 
             var toggleCerrado = tp ? 1 : 0;
             var toggleNoti = tn ? 1 : 0;
+            var toggleSlider = ts ? 1 : 0;
 
             if(mensaje === ''){
                 toastr.error('Mensaje de Cerrado es Requerido');
@@ -196,6 +215,7 @@
             formData.append('mensaje', mensaje);
             formData.append('cbcerrado', toggleCerrado);
             formData.append('cbnoti', toggleNoti);
+            formData.append('cbslider', toggleSlider);
 
             axios.post('/admin/configuracion/editar', formData, {
             })
