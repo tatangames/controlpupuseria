@@ -15,14 +15,14 @@ use Illuminate\Support\Facades\Storage;
 class CategoriasController extends Controller
 {
     public function indexBloque(){
-        return view('backend.admin.bloques.vistabloques');
+        return view('backend.admin.bloques.vistaBloques');
     }
 
     // tabla
     public function tablaBloque(){
         $bloques = BloqueServicios::orderBy('posicion')->get();
 
-        return view('backend.admin.bloques.tablabloques', compact('bloques'));
+        return view('backend.admin.bloques.tablaBloques', compact('bloques'));
     }
 
     public function nuevoBloque(Request $request){
@@ -167,14 +167,14 @@ class CategoriasController extends Controller
 
     public function indexCategorias($id){
 
-        return view('backend.admin.categorias.vistacategorias', compact('id'));
+        return view('backend.admin.categorias.vistaCategorias', compact('id'));
     }
 
     // tabla
     public function tablaCategorias($id){
         $categorias = Categorias::where('bloque_servicios_id', $id)->orderBy('posicion')->get();
 
-        return view('backend.admin.categorias.tablacategorias', compact('categorias'));
+        return view('backend.admin.categorias.tablaCategorias', compact('categorias'));
     }
 
     public function nuevaCategorias(Request $request){
@@ -273,7 +273,7 @@ class CategoriasController extends Controller
 
         $categoria = Categorias::where('id', $id)->pluck('nombre')->first();
 
-        return view('backend.admin.productos.vistaproductos', compact('id', 'categoria'));
+        return view('backend.admin.productos.vistaProductos', compact('id', 'categoria'));
     }
 
     // tabla
@@ -284,7 +284,7 @@ class CategoriasController extends Controller
            $pp->precio = number_format((float)$pp->precio, 2, '.', ',');
         }
 
-        return view('backend.admin.productos.tablaproductos', compact('productos'));
+        return view('backend.admin.productos.tablaProductos', compact('productos'));
     }
 
 

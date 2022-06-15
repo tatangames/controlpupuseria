@@ -10,14 +10,14 @@ use Illuminate\Support\Facades\Validator;
 class AfiliadoController extends Controller
 {
     public function index(){
-        return view('backend.admin.afiliados.vistaafiliados');
+        return view('backend.admin.afiliados.vistaAfiliados');
     }
 
     // tabla
     public function tablaAfiliados(){
         $afiliados = Afiliados::orderBy('nombre')->get();
 
-        return view('backend.admin.afiliados.tablaafiliados', compact('afiliados'));
+        return view('backend.admin.afiliados.tablaAfiliados', compact('afiliados'));
     }
 
     public function nuevo(Request $request){

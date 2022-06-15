@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Validator;
 class OrdenesController extends Controller
 {
     public function index(){
-        return view('backend.admin.ordenes.todas.vistaordenes');
+        return view('backend.admin.ordenes.todas.vistaOrdenes');
     }
 
     public function tablaOrdenes(){
@@ -69,7 +69,7 @@ class OrdenesController extends Controller
             $mm->estado = $estado;
         }
 
-        return view('backend.admin.ordenes.todas.tablaordenes', compact('ordenes'));
+        return view('backend.admin.ordenes.todas.tablaOrdenes', compact('ordenes'));
     }
 
     public function informacionOrden(Request $request){
@@ -95,7 +95,7 @@ class OrdenesController extends Controller
     }
 
     public function indexProductosOrdenes($id){
-        return view('backend.admin.ordenes.productos.vistaproductoorden', compact('id'));
+        return view('backend.admin.ordenes.productos.vistaProductoOrden', compact('id'));
     }
 
     public function tablaOrdenesProducto($id){
@@ -112,7 +112,7 @@ class OrdenesController extends Controller
             $ll->precio = number_format((float)$ll->precio, 2, '.', ',');
         }
 
-        return view('backend.admin.ordenes.productos.tablaproductoorden', compact('lista'));
+        return view('backend.admin.ordenes.productos.tablaProductoOrden', compact('lista'));
 
     }
 
@@ -121,7 +121,7 @@ class OrdenesController extends Controller
         $dataFecha = Carbon::now('America/El_Salvador');
         $fecha = date("d-m-Y", strtotime($dataFecha));
 
-        return view('backend.admin.ordenes.hoy.vistaordeneshoy', compact('fecha'));
+        return view('backend.admin.ordenes.hoy.vistaOrdenesHoy', compact('fecha'));
     }
 
     public function tablaOrdenesHoy(){
@@ -174,7 +174,7 @@ class OrdenesController extends Controller
             $mm->estado = $estado;
         }
 
-        return view('backend.admin.ordenes.hoy.tablaordeneshoy', compact('ordenes'));
+        return view('backend.admin.ordenes.hoy.tablaOrdenesHoy', compact('ordenes'));
     }
 
 

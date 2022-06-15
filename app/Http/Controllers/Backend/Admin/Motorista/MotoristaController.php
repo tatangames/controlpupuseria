@@ -12,14 +12,14 @@ use Illuminate\Support\Facades\Validator;
 class MotoristaController extends Controller
 {
     public function index(){
-        return view('backend.admin.motoristas.vistamotorista');
+        return view('backend.admin.motoristas.vistaMotorista');
     }
 
     // tabla
     public function tablaMotoristas(){
         $motoristas = Motoristas::orderBy('nombre')->get();
 
-        return view('backend.admin.motoristas.tablamotorista', compact('motoristas'));
+        return view('backend.admin.motoristas.tablaMotorista', compact('motoristas'));
     }
 
     public function nuevo(Request $request){
@@ -109,7 +109,7 @@ class MotoristaController extends Controller
     // ***** MOTORISTAS ORDENES *****
 
     public function indexMotoristaOrdenes(){
-        return view('backend.admin.motoristas.ordenes.vistamotoristaordenes');
+        return view('backend.admin.motoristas.ordenes.vistaMotoristaOrdenes');
     }
 
     public function tablaMotoristasOrdenes(){
@@ -146,7 +146,7 @@ class MotoristaController extends Controller
             $mm->estado = $estado;
         }
 
-        return view('backend.admin.motoristas.ordenes.tablavistamotoristaordenes', compact('motoristas'));
+        return view('backend.admin.motoristas.ordenes.tablaVistaMotoristaOrdenes', compact('motoristas'));
     }
 
     public function informacionMotoristaOrden(Request $request){

@@ -14,7 +14,7 @@ use Illuminate\Support\Str;
 class EventosController extends Controller
 {
     public function indexEventos(){
-        return view('backend.admin.eventos.vistabloqueeventos');
+        return view('backend.admin.eventos.vistaBloqueEventos');
     }
 
     // tabla
@@ -25,7 +25,7 @@ class EventosController extends Controller
             $ee->fecha = date("d-m-Y", strtotime($ee->fecha));
         }
 
-        return view('backend.admin.eventos.tablabloqueeventos', compact('eventos'));
+        return view('backend.admin.eventos.tablaBloqueEventos', compact('eventos'));
     }
 
     public function nuevoEvento(Request $request){
@@ -202,14 +202,14 @@ class EventosController extends Controller
 
 
     public function indexImagenes($id){
-        return view('backend.admin.eventos.imagenes.vistaimagenes', compact('id'));
+        return view('backend.admin.eventos.imagenes.vistaImagenes', compact('id'));
     }
 
     // tabla
     public function tablaImagenes($id){
         $eventos = EventoImagenes::where('evento_id', $id)->orderBy('posicion')->get();
 
-        return view('backend.admin.eventos.imagenes.tablaimagenes', compact('eventos'));
+        return view('backend.admin.eventos.imagenes.tablaImagenes', compact('eventos'));
     }
 
 

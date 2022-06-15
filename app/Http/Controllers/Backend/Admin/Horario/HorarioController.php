@@ -14,7 +14,7 @@ class HorarioController extends Controller
 {
 
     public function indexHorario(){
-        return view('backend.admin.zonas.horario.vistahorario');
+        return view('backend.admin.zonas.horario.vistaHorario');
     }
 
     // tabla
@@ -26,7 +26,7 @@ class HorarioController extends Controller
             $hh->hora2 = date("h:i A", strtotime($hh->hora2));
         }
 
-        return view('backend.admin.zonas.horario.tablahorario', compact('horario'));
+        return view('backend.admin.zonas.horario.tablaHorario', compact('horario'));
     }
 
     public function informacionHorario(Request $request){
@@ -72,14 +72,14 @@ class HorarioController extends Controller
     }
 
     public function indexConfiguracion(){
-        return view('backend.admin.informacion.vistainformacion');
+        return view('backend.admin.informacion.vistaInformacion');
     }
 
     // tabla
     public function tablaConfiguracion(){
         $info = InformacionAdmin::get();
 
-        return view('backend.admin.informacion.tablainformacion', compact('info'));
+        return view('backend.admin.informacion.tablaInformacion', compact('info'));
     }
 
     public function informacionConfiguracion(Request $request){
