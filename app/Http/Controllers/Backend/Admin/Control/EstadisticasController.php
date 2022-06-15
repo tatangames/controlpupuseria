@@ -30,7 +30,7 @@ class EstadisticasController extends Controller
         $vtotal = Ordenes::where('estado_7', 0)->sum('precio_consumido');
         $vtotal = number_format((float)$vtotal, 2, '.', ',');
 
-        return view('backend.admin.estadisticas.vistaestadisticas', compact('clientehoy', 'clientetotal',
+        return view('backend.admin.estadisticas.vistaEstadisticas', compact('clientehoy', 'clientetotal',
         'tordenes', 'vtotal'));
     }
 }
