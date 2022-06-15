@@ -84,7 +84,7 @@
 
                                 <div class="form-group">
                                     <label>Descripción</label>
-                                    <input type="text" maxlength="2000" class="form-control" id="descripcion-nuevo" placeholder="Descripción">
+                                    <textarea placeholder="Descripción" rows="4" cols="50" class="form-control" id="descripcion-nuevo"></textarea>
                                 </div>
 
                                 <div class="form-group">
@@ -167,7 +167,7 @@
 
                             <div class="form-group">
                                 <label>Descripción</label>
-                                <input type="text" maxlength="2000" class="form-control" id="descripcion-editar" placeholder="Descripción">
+                                <textarea placeholder="Descripción" rows="4" cols="50" class="form-control" id="descripcion-editar"></textarea>
                             </div>
 
                             <div class="form-group">

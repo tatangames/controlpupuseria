@@ -19,7 +19,7 @@ class CreateProductoTable extends Migration
 
             $table->string('nombre', 150);
             $table->string('imagen', 100)->nullable();
-            $table->string('descripcion', 2000)->nullable();
+            $table->text('descripcion', 2000)->nullable();
             $table->decimal('precio', 10,2);
             $table->boolean('disponibilidad');
             $table->boolean('activo');
