@@ -5,6 +5,8 @@
     <link href="{{ asset('css/dataTables.bootstrap4.css') }}" type="text/css" rel="stylesheet" />
     <link href="{{ asset('css/toastr.min.css') }}" type="text/css" rel="stylesheet" />
     <link href="{{ asset('css/estiloToggle.css') }}" type="text/css" rel="stylesheet" />
+    <link href="{{ asset('css/select2.min.css') }}" type="text/css" rel="stylesheet">
+    <link href="{{ asset('css/select2-bootstrap-5-theme.min.css') }}" type="text/css" rel="stylesheet">
 
 @stop
 
@@ -68,20 +70,31 @@
                             <div class="col-md-12">
 
                                 <div class="form-group">
+                                    <label>Producto:</label>
+                                    <select class="form-control" id="select-producto-nuevo">
+                                        <option value=""> Seleccionar opción</option>
+                                        @foreach($productos as $dd)
+                                            <option value="{{ $dd->id }}"> {{ $dd->nombre }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
                                     <label>Descripción</label>
-                                    <input type="text" maxlength="300" class="form-control" id="nombre-nuevo" placeholder="Descripción">
+                                    <input type="text" maxlength="300" autocomplete="off" class="form-control" id="nombre-nuevo" placeholder="Descripción">
                                 </div>
 
                                 <div class="form-group">
                                     <div>
                                         <label>Imagen</label>
-                                        <p>Tamaño recomendado de: 600 x 400 px</p>
+                                        <p>Tamaño recomendado de: 2048 x 1000 px</p>
                                     </div>
                                     <br>
                                     <div class="col-md-10">
                                         <input type="file" style="color:#191818" id="imagen-nuevo" accept="image/jpeg, image/jpg, image/png"/>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -112,9 +125,26 @@
                         <div class="col-md-12">
 
                             <div class="form-group">
-                                <label>Nombre</label>
+                                <label>Producto:</label>
+                                <select class="form-control" id="select-producto-editar">
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Descripción</label>
                                 <input type="hidden" id="id-editar">
-                                <input type="text" maxlength="300" class="form-control" id="nombre-editar" placeholder="Descripción">
+                                <input type="text" maxlength="300" autocomplete="off" class="form-control" id="nombre-editar" placeholder="Descripción">
+                            </div>
+
+                            <div class="form-group">
+                                <div>
+                                    <label>Imagen</label>
+                                    <p>Tamaño recomendado de: 2048 x 1000 px</p>
+                                </div>
+                                <br>
+                                <div class="col-md-10">
+                                    <input type="file" style="color:#191818" id="imagen-editar" accept="image/jpeg, image/jpg, image/png"/>
+                                </div>
                             </div>
 
                         </div>
@@ -139,11 +169,34 @@
     <script src="{{ asset('js/axios.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/sweetalert2.all.min.js') }}"></script>
     <script src="{{ asset('js/alertaPersonalizada.js') }}"></script>
+    <script src="{{ asset('js/select2.min.js') }}" type="text/javascript"></script>
 
     <script type="text/javascript">
         $(document).ready(function(){
             var ruta = "{{ URL::to('/admin/sliders/tablas') }}";
             $('#tablaDatatable').load(ruta);
+
+
+            $('#select-producto-nuevo').select2({
+                theme: "bootstrap-5",
+                "language": {
+                    "noResults": function(){
+                        return "Busqueda no encontrada";
+                    }
+                },
+            });
+
+
+            $('#select-producto-editar').select2({
+                theme: "bootstrap-5",
+                "language": {
+                    "noResults": function(){
+                        return "Busqueda no encontrada";
+                    }
+                },
+            });
+
+
         });
     </script>
 
@@ -157,6 +210,8 @@
         // abrir modal
         function modalNuevo(){
             document.getElementById("formulario-nuevo").reset();
+            $("#select-producto-nuevo").val('').trigger('change');
+
             $('#modalAgregar').modal('show');
         }
 
@@ -165,6 +220,7 @@
 
             var nombre = document.getElementById('nombre-nuevo').value;
             var imagen = document.getElementById('imagen-nuevo');
+            var producto = document.getElementById('select-producto-nuevo').value;
 
             if(nombre.length > 300){
                 toastr.error('Descripción máximo 300 caracteres');
@@ -186,6 +242,7 @@
             var formData = new FormData();
             formData.append('nombre', nombre);
             formData.append('imagen', imagen.files[0]);
+            formData.append('producto', producto);
 
             axios.post('/admin/sliders/nuevo', formData, {
             })
@@ -209,6 +266,8 @@
         function informacion(id){
 
             document.getElementById("formulario-editar").reset();
+            $("#select-producto-editar").val('').trigger('change');
+
             openLoading();
 
             axios.post('/admin/sliders/informacion',{
@@ -218,9 +277,22 @@
                     closeLoading();
                     if(response.data.success === 1){
 
+                        document.getElementById("select-producto-editar").options.length = 0;
+
                         $('#modalEditar').modal('show');
                         $('#id-editar').val(id);
+
+
                         $('#nombre-editar').val(response.data.slider.descripcion);
+
+                        $('#select-producto-editar').append('<option value="">Seleccionar opción</option>');
+                        $.each(response.data.producto, function( key, val ){
+                            if(response.data.idproducto == val.id){
+                                $('#select-producto-editar').append('<option value="' +val.id +'" selected="selected">'+ val.nombre +'</option>');
+                            }else{
+                                $('#select-producto-editar').append('<option value="' +val.id +'">'+ val.nombre +'</option>');
+                            }
+                        });
 
                     }else{
                         toastr.error('Error al buscar');
@@ -236,16 +308,27 @@
 
             var id = document.getElementById('id-editar').value;
             var nombre = document.getElementById('nombre-editar').value;
+            var imagen = document.getElementById('imagen-editar');
+            var producto = document.getElementById('select-producto-editar').value;
 
             if(nombre.length > 300){
                 toastr.error('Descripción máximo 300 caracteres');
                 return;
             }
 
+            if(imagen.files && imagen.files[0]){ // si trae imagen
+                if (!imagen.files[0].type.match('image/jpeg|image/jpeg|image/png')){
+                    toastr.error('Formato de imagen permitido: .png .jpg .jpeg');
+                    return;
+                }
+            }
+
             openLoading();
             var formData = new FormData();
             formData.append('id', id);
             formData.append('nombre', nombre);
+            formData.append('imagen', imagen.files[0]);
+            formData.append('producto', producto);
 
             axios.post('/admin/sliders/editar', formData, {
             })

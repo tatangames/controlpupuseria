@@ -485,11 +485,21 @@ class CategoriasController extends Controller
 
     // ---- SLIDERS ----
     public function indexSliders(){
-        return view('backend.admin.slider.vistaSlider');
+
+        $productos = Producto::where('activo', 1)->orderBy('nombre')->get();
+
+        return view('backend.admin.slider.vistaSlider', compact('productos'));
     }
 
     public function tablaSliders(){
         $slider = BloqueSlider::orderBy('posicion')->get();
+
+        foreach ($slider as $ss){
+
+            if($info = Producto::where('id', $ss->id_producto)->first()){
+                $ss->producto = $info->nombre;
+            }
+        }
 
         return view('backend.admin.slider.tablaSlider', compact('slider'));
     }
@@ -519,6 +529,7 @@ class CategoriasController extends Controller
                 $ca = new BloqueSlider();
                 $ca->descripcion = $request->nombre;
                 $ca->imagen = $nombreFoto;
+                $ca->id_producto = $request->producto;
                 $ca->posicion = $suma;
 
                 if($ca->save()){
@@ -584,7 +595,10 @@ class CategoriasController extends Controller
 
         if($bloque = BloqueSlider::where('id', $request->id)->first()){
 
-            return ['success' => 1, 'slider' => $bloque];
+            $producto = Producto::where('activo', 1)->orderBy('nombre')->get();
+
+            return ['success' => 1, 'slider' => $bloque, 'producto' => $producto,
+                'idproducto' => $bloque->id_producto];
         }else{
             return ['success' => 2];
         }
@@ -592,11 +606,45 @@ class CategoriasController extends Controller
 
     public function editarSlider(Request $request){
 
-        if(BloqueSlider::where('id', $request->id)->first()){
+        if($info = BloqueSlider::where('id', $request->id)->first()){
 
-            BloqueSlider::where('id', $request->id)->update([
-                'descripcion' => $request->nombre
-            ]);
+            if($request->hasFile('imagen')){
+
+                $cadena = Str::random(15);
+                $tiempo = microtime();
+                $union = $cadena.$tiempo;
+                $nombre = str_replace(' ', '_', $union);
+
+                $extension = '.'.$request->imagen->getClientOriginalExtension();
+                $nombreFoto = $nombre.strtolower($extension);
+                $avatar = $request->file('imagen');
+                $upload = Storage::disk('imagenes')->put($nombreFoto, \File::get($avatar));
+
+                if($upload){
+                    $imagenOld = $info->imagen;
+
+                    BloqueSlider::where('id', $request->id)->update([
+                        'descripcion' => $request->nombre,
+                        'imagen' => $nombreFoto,
+                        'id_producto' => $request->producto
+                    ]);
+
+                    if(Storage::disk('imagenes')->exists($imagenOld)){
+                        Storage::disk('imagenes')->delete($imagenOld);
+                    }
+
+                    return ['success' => 1];
+
+                }else{
+                    return ['success' => 2];
+                }
+            }else {
+
+                BloqueSlider::where('id', $request->id)->update([
+                    'descripcion' => $request->nombre,
+                    'id_producto' => $request->producto
+                ]);
+            }
 
             return ['success' => 1];
         }else{

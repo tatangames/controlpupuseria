@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend\Api\Servicios;
 
 use App\Http\Controllers\Controller;
 use App\Models\BloqueServicios;
+use App\Models\BloqueSlider;
 use App\Models\Clientes;
 use App\Models\DireccionCliente;
 use Illuminate\Http\Request;
@@ -38,9 +39,18 @@ class ApiZonasServiciosController extends Controller
         ->orderBy('posicion', 'ASC')
         ->get();
 
+        $slider = BloqueSlider::orderBy('posicion')->get();
+
+        foreach ($slider as $ss){
+            if($ss->id_producto == null){
+                $ss->id_producto = 0;
+            }
+        }
+
         return [
             'success' => 2,
-            'servicios' => $servicios
+            'servicios' => $servicios,
+            'slider' => $slider
         ];
     }
 

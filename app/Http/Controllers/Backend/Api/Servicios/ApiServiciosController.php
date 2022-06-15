@@ -85,11 +85,11 @@ class ApiServiciosController extends Controller
     }
 
 
-    public function listadoSliders(){
+   /* public function listadoSliders(){
         $slider = BloqueSlider::orderBy('posicion')->get();
         $info = InformacionAdmin::where('id', 1)->first();
 
         return ['success' => 1, 'eventos' => $slider, 'estado' => $info->activo_slider];
-    }
+    }*/
 
 }

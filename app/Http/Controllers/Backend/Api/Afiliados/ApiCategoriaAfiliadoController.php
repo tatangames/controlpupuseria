@@ -9,6 +9,7 @@ use App\Models\Afiliados;
 use App\Models\Categorias;
 use App\Models\Clientes;
 use App\Models\Motoristas;
+use App\Models\MotoristasExperiencia;
 use App\Models\MotoristasOrdenes;
 use App\Models\Ordenes;
 use App\Models\OrdenesDescripcion;
@@ -383,7 +384,7 @@ class ApiCategoriaAfiliadoController extends Controller
                         $titulo = "Orden #" . $request->ordenid . " Cancelada";
                         $mensaje = "Revise su Orden";
 
-                        SendNotiClienteJobs::dispatch($titulo, $mensaje, $infoCliente->token_fcm);
+                       // SendNotiClienteJobs::dispatch($titulo, $mensaje, $infoCliente->token_fcm);
                     }
 
                     DB::commit();
@@ -456,7 +457,7 @@ class ApiCategoriaAfiliadoController extends Controller
                     $titulo = "Orden #" . $request->ordenid . " Aceptada";
                     $mensaje = "Su orden inicia su Preparación";
 
-                    SendNotiClienteJobs::dispatch($titulo, $mensaje, $infoCliente->token_fcm);
+                   // SendNotiClienteJobs::dispatch($titulo, $mensaje, $infoCliente->token_fcm);
                 }
 
                 // notificacion a motorista que hay orden nueva
@@ -475,7 +476,7 @@ class ApiCategoriaAfiliadoController extends Controller
                 $mensaje = "Por Favor Verificar";
 
                 if($pilaMotoristas != null) {
-                    SendNotiMotoristaJobs::dispatch($titulo, $mensaje, $pilaMotoristas);
+                   // SendNotiMotoristaJobs::dispatch($titulo, $mensaje, $pilaMotoristas);
                 }
 
                 // orden iniciada
@@ -580,7 +581,7 @@ class ApiCategoriaAfiliadoController extends Controller
                     $titulo = "Orden #" . $request->ordenid;
                     $mensaje = "Esta lista para su Entrega";
 
-                    SendNotiMotoristaJobs::dispatch($titulo, $mensaje, $info->token_fcm);
+                   // SendNotiMotoristaJobs::dispatch($titulo, $mensaje, $info->token_fcm);
                 }
             }
 
@@ -600,7 +601,7 @@ class ApiCategoriaAfiliadoController extends Controller
 
         if($validarDatos->fails()){return ['success' => 0]; }
 
-        if($p = Afiliados::where('id', $request->id)->first()){
+        if(Afiliados::where('id', $request->id)->first()){
 
             $orden = Ordenes::where('estado_3', 1)
                 ->whereDate('fecha_orden', '=', Carbon::today('America/El_Salvador')->toDateString())
@@ -624,6 +625,26 @@ class ApiCategoriaAfiliadoController extends Controller
                 $o->telefono = $infoOrden->telefono;
 
                 $o->precio_consumido = number_format((float)$o->precio_consumido, 2, '.', ',');
+
+                $calificada = "";
+                $motorista = "";
+
+                if($infoC = MotoristasExperiencia::where('ordenes_id', $o->id)->first()){
+                    if($infoC->mensaje != null) {
+                        $calificada = "#" . $infoC->experiencia . " | " . $infoC->mensaje;
+                    }else{
+                        $calificada = "#" . $infoC->experiencia;
+                    }
+                }
+
+                if($infoM = MotoristasOrdenes::where('ordenes_id', $o->id)->first()){
+                    $datos = Motoristas::where('id', $infoM->motoristas_id)->first();
+                    $motorista = $datos->nombre;
+                }
+
+
+                $o->calificada = $calificada;
+                $o->motorista = $motorista;
             }
 
             return ['success' => 1, 'ordenes' => $orden];
@@ -660,7 +681,7 @@ class ApiCategoriaAfiliadoController extends Controller
 
                 $o->fecha_orden = date("d-m-Y h:i A", strtotime($o->fecha_orden));
 
-                $estado = "";
+                $estado = "En proceso";
 
                 if($o->estado_2 == 1){
                     $estado = "Orden Preparandose";
@@ -702,6 +723,43 @@ class ApiCategoriaAfiliadoController extends Controller
         }else{
             return ['success' => 2];
         }
+    }
+
+    public function actualizarCantidadProducto(Request $request){
+
+        $rules = array(
+            'id' => 'required'
+        );
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if($validator->fails()){return ['success' => 0]; }
+
+        if($info = OrdenesDescripcion::where('id', $request->id)->first()){
+
+            if($info->cantidad != $request->cantidad){
+                OrdenesDescripcion::where('id', $request->id)->update(['cantidad' => $request->cantidad]);
+
+
+                // obtener todos los productos de la orden
+                $todos = OrdenesDescripcion::where('ordenes_id', $info->ordenes_id)->get();
+                $sumado = 0;
+
+                // multiplicar precio x cantidad
+                foreach($todos as $p){
+                    $multi = $p->cantidad * $p->precio;
+                    $sumado = $sumado + $multi;
+                }
+
+                // setear consumo
+                Ordenes::where('id', $info->ordenes_id)->update(['precio_consumido' => $sumado]);
+            }
+
+            return ['success' => 1];
+        }else{
+            return ['success' => 2];
+        }
+
     }
 
 }

@@ -127,7 +127,6 @@ class HorarioController extends Controller
 
     public function indexIntentosCorreo(){
         return view('backend.admin.intentos.vistaintentocorreo');
-
     }
 
     public function tablaIntentosCorreo(){

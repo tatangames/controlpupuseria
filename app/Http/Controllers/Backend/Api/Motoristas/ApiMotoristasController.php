@@ -90,6 +90,8 @@ class ApiMotoristasController extends Controller
                 $o->direccion = $infoDireccion->direccion;
                 $o->telefono = $infoDireccion->telefono;
 
+                $o->precio_consumido = number_format((float)$o->precio_consumido, 2, '.', ',');
+
                 $o->fecha_orden = date("h:i A d-m-Y", strtotime($o->fecha_orden));
             }
 
@@ -229,7 +231,7 @@ class ApiMotoristasController extends Controller
             $orden = DB::table('motoristas_ordenes AS mo')
                 ->join('ordenes AS o', 'o.id', '=', 'mo.ordenes_id')
                 ->select('o.id', 'o.precio_consumido', 'o.fecha_4',
-                    'o.estado_5', 'o.estado_6', 'o.precio_envio',
+                    'o.estado_5', 'o.estado_6',
                     'o.estado_7', 'o.visible_m', 'o.nota', 'o.fecha_orden')
                 ->where('o.estado_6', 0) // aun sin entregar al cliente
                 ->where('o.visible_m', 1) // para ver si una orden fue cancelada, y el motorista la agarro, asi ver el estado
@@ -240,9 +242,7 @@ class ApiMotoristasController extends Controller
             // sumar mas envio
             foreach($orden as $o) {
 
-                $suma = $o->precio_consumido + $o->precio_envio;
-                $o->precio_consumido = number_format((float)$suma, 2, '.', ',');
-                $o->precio_envio = number_format((float)$o->precio_envio, 2, '.', ',');
+                $o->precio_consumido = number_format((float)$o->precio_consumido, 2, '.', ',');
 
                 $o->fecha_orden = date("d-m-Y h:i A", strtotime($o->fecha_orden));
             }
@@ -315,7 +315,7 @@ class ApiMotoristasController extends Controller
                     $titulo = "Orden #" . $request->ordenid . " En Camino";
                     $mensaje = "El Motorista se Dirige a su Dirección";
 
-                    SendNotiClienteJobs::dispatch($titulo, $mensaje, $infoCliente->token_fcm);
+                   // SendNotiClienteJobs::dispatch($titulo, $mensaje, $infoCliente->token_fcm);
                 }
 
                 return ['success' => 2]; //orden va en camino
@@ -419,7 +419,7 @@ class ApiMotoristasController extends Controller
             $orden = DB::table('motoristas_ordenes AS mo')
                 ->join('ordenes AS o', 'o.id', '=', 'mo.ordenes_id')
                 ->select('o.id', 'o.precio_consumido', 'o.fecha_4',
-                    'o.precio_envio','o.estado_7', 'o.visible_m', 'o.fecha_orden',
+                    'o.estado_7', 'o.visible_m', 'o.fecha_orden',
                     'o.nota')
                 ->where('o.estado_4', 1) // motorista inicio entrega
                 ->where('o.estado_7', 0) // orden no cancelada
@@ -430,8 +430,7 @@ class ApiMotoristasController extends Controller
             // sumar mas envio
             foreach($orden as $o){
                 $o->fecha_orden = date("h:i A d-m-Y", strtotime($o->fecha_orden));
-                $total = $o->precio_consumido + $o->precio_envio;
-                $o->total = number_format((float)$total, 2, '.', ',');
+                $o->total = number_format((float)$o->precio_consumido, 2, '.', ',');
             }
 
             return ['success' => 1, 'ordenes' => $orden];
@@ -470,7 +469,7 @@ class ApiMotoristasController extends Controller
                 $titulo = "Orden #" . $request->ordenid . " Entregada";
                 $mensaje = "Muchas Gracias.";
 
-                SendNotiClienteJobs::dispatch($titulo, $mensaje, $infoCliente->token_fcm);
+                //SendNotiClienteJobs::dispatch($titulo, $mensaje, $infoCliente->token_fcm);
             }
 
             return ['success' => 2]; // orden completada
@@ -498,7 +497,7 @@ class ApiMotoristasController extends Controller
 
             $orden = DB::table('motoristas_ordenes AS m')
                 ->join('ordenes AS o', 'o.id', '=', 'm.ordenes_id')
-                ->select('o.id', 'o.precio_consumido', 'o.precio_envio', 'o.fecha_orden',
+                ->select('o.id', 'o.precio_consumido', 'o.fecha_orden',
                     'm.motoristas_id', 'o.estado_7', 'o.nota', 'o.estado_5')
                 ->where('m.motoristas_id', $request->id) // del motorista
                 ->whereBetween('o.fecha_orden', [$start, $end])
@@ -509,6 +508,8 @@ class ApiMotoristasController extends Controller
             $totalCobrado = 0; // precio envio + venta
             foreach($orden as $o){
                 $totalOrdenes++;
+
+                $totalCobrado = $totalCobrado + $o->precio_consumido;
 
                 $o->fecha_orden = date("h:i A d-m-Y", strtotime($o->fecha_orden));
 
@@ -521,10 +522,7 @@ class ApiMotoristasController extends Controller
                     $o->estado = "";
                 }
 
-                $total = $o->precio_envio + $o->precio_consumido;
-                $totalCobrado = $totalCobrado + $total;
-                $o->precio_envio = number_format((float)$o->precio_envio, 2, '.', ',');
-                $o->total = number_format((float)$total, 2, '.', ',');
+                $o->total = number_format((float)$o->precio_consumido, 2, '.', ',');
 
                 $infoCliente = OrdenesDirecciones::where('ordenes_id', $o->id)->first();
 

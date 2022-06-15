@@ -9,6 +9,7 @@
                         <tr>
                             <th>Posición</th>
                             <th>Descripción</th>
+                            <th>Producto</th>
                             <th>Imagen</th>
                             <th>Opciones</th>
                         </tr>
@@ -19,7 +20,7 @@
 
                                 <td>{{ $dato->posicion }}</td>
                                 <td>{{ $dato->descripcion }}</td>
-
+                                <td>{{ $dato->producto }}</td>
                                 <td>
                                     <center><img alt="Imagenes" src="{{ url('storage/imagenes/'.$dato->imagen) }}" width="150px" height="150px" /></center>
                                 </td>
